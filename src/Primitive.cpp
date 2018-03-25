@@ -1,8 +1,10 @@
 #include "Primitive.hpp"
 
-Primitive::Primitive() : m_VertexCount(0), m_IndexCount(0) {
+Primitive::Primitive(ID3D11Device *device, Shader *shader) : m_VertexCount(0), m_IndexCount(0) {
 	m_VertexBuffer = NULL;
 	m_IndexBuffer = NULL;
+
+	init(device, shader);
 }
 
 Primitive::~Primitive() {

@@ -6,6 +6,7 @@
 #include "Timer.h"
 #include "Input.hpp"
 #include "Graphics.hpp"
+#include "Primitive.hpp"
 
 #include <D3D10.h>
 #include <D3DX10.h>

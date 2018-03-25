@@ -18,10 +18,8 @@ struct Rect {
 
 class Primitive {
 	public:
-		Primitive();
+		Primitive(ID3D11Device *device, Shader *shader);
 		~Primitive();
-
-		virtual bool init(ID3D11Device *device, Shader *shader);
 
 		void render(ID3D11DeviceContext *deviceContext, D3DXMATRIX viewMatrix, D3DXMATRIX projMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour);
 		void cleanup();
@@ -61,6 +59,7 @@ class Primitive {
 		std::vector<Vertex> m_Vertices;
 		std::vector<unsigned long> m_Indices;
 
+		virtual bool init(ID3D11Device *device, Shader *shader);
 		bool initData(ID3D11Device *device, std::vector<Vertex> &vertices, std::vector<unsigned long> &indices);
 };
 

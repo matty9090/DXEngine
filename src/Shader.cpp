@@ -2,12 +2,14 @@
 
 #include <fstream>
 
-Shader::Shader() {
+Shader::Shader(ID3D11Device *device) {
 	m_VertexShader = NULL;
 	m_PixelShader = NULL;
 	m_Layout = NULL;
 	m_MatrixBuffer = NULL;
 	m_LightBuffer = NULL;
+
+	init(device);
 }
 
 bool Shader::init(ID3D11Device *device) {
