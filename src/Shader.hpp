@@ -10,7 +10,7 @@ class Shader {
 		Shader();
 		~Shader();
 
-		bool init(ID3D11Device *device, HWND hwnd);
+		bool init(ID3D11Device *device);
 		void cleanup();
 		bool render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour);
 
@@ -38,5 +38,5 @@ class Shader {
 		ID3D11Buffer *m_MatrixBuffer, *m_LightBuffer;
 		
 		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour);
-		void handleErrors(ID3D10Blob *errorMessage, HWND hwnd, char *shaderFilename);
+		void handleErrors(ID3D10Blob *errorMessage, char *shaderFilename);
 };

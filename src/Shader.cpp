@@ -10,7 +10,7 @@ Shader::Shader() {
 	m_LightBuffer = NULL;
 }
 
-bool Shader::init(ID3D11Device *device, HWND hwnd) {
+bool Shader::init(ID3D11Device *device) {
 	ID3D10Blob *errorMessage = NULL;
 	ID3DBlob *vertexShaderBuffer = NULL, *pixelShaderBuffer = NULL;
 	D3D11_BUFFER_DESC matrixBufferDesc;
@@ -106,7 +106,7 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	return true;
 }
 
-void Shader::handleErrors(ID3D10Blob *errorMessage, HWND hwnd, char *shaderFilename) {
+void Shader::handleErrors(ID3D10Blob *errorMessage, char *shaderFilename) {
 	char *compileErrors;
 	unsigned long bufferSize, i;
 	std::ofstream file("errors.txt");
@@ -121,8 +121,6 @@ void Shader::handleErrors(ID3D10Blob *errorMessage, HWND hwnd, char *shaderFilen
 
 	errorMessage->Release();
 	errorMessage = 0;
-
-	MessageBoxA(hwnd, "Error compiling shader, check errors.txt", shaderFilename, MB_OK);
 }
 
 Shader::~Shader() {
