@@ -63,6 +63,18 @@ class Primitive {
 		std::vector<Vertex> m_Vertices;
 		std::vector<unsigned long> m_Indices;
 
-		virtual bool init(ID3D11Device *device, Shader *shader);
-		bool initData(ID3D11Device *device, std::vector<Vertex> &vertices, std::vector<unsigned long> &indices);
+		virtual void init() = 0;
+		void initMatrices();
+		bool initData();
+};
+
+class Cube : public Primitive {
+	public:
+		Cube(ID3D11Device *device, Shader *shader) : Primitive(device, shader) {
+			init();
+			initData();
+		}
+
+	private:
+		void init();
 };
