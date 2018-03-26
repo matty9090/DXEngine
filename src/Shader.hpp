@@ -5,13 +5,15 @@
 #include <d3dx11async.h>
 #include <d3dcompiler.h>
 
+#include <string>
+
 class Shader {
 	public:
-		Shader(ID3D11Device *device);
+		Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader);
 		~Shader();
 		
 		void cleanup();
-		bool render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour);
+		bool render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour);
 
 	private:
 		struct MatrixBuffer {
@@ -36,7 +38,7 @@ class Shader {
 		ID3D11InputLayout *m_Layout;
 		ID3D11Buffer *m_MatrixBuffer, *m_LightBuffer;
 		
-		bool init(ID3D11Device *device);
-		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour);
+		bool init(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader);
+		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX &worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour);
 		void handleErrors(ID3D10Blob *errorMessage, char *shaderFilename);
 };

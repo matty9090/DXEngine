@@ -37,18 +37,18 @@ bool Primitive::init(ID3D11Device *device, Shader *shader) {
 	};
 
 	m_VertexCount = m_Vertices.size();
-	m_IndexCount = m_Indices.size();
+	m_IndexCount  = m_Indices.size();
 
 	D3DXMatrixIdentity(&m_WorldMatrix);
 	D3DXMatrixTranslation(&m_MatrixMov, 0, 0, 0);
-	D3DXMatrixScaling(&m_ScaleMatrix, 0.1f, 0.1f, 0.2);
+	D3DXMatrixScaling(&m_ScaleMatrix, 0.1f, 0.1f, 0.2f);
 
 	initData(device, m_Vertices, m_Indices);
 
 	return true;
 }
 
-void Primitive::render(ID3D11DeviceContext *deviceContext, D3DXMATRIX viewMatrix, D3DXMATRIX projMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour) {
+void Primitive::render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour) const {
 	unsigned int stride;
 	unsigned int offset;
 

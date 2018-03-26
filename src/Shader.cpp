@@ -2,25 +2,25 @@
 
 #include <fstream>
 
-Shader::Shader(ID3D11Device *device) {
+Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader) {
 	m_VertexShader = NULL;
 	m_PixelShader = NULL;
 	m_Layout = NULL;
 	m_MatrixBuffer = NULL;
 	m_LightBuffer = NULL;
 
-	init(device);
+	init(device, vertexShader, pixelShader);
 }
 
-bool Shader::init(ID3D11Device *device) {
+bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader) {
 	ID3D10Blob *errorMessage = NULL;
 	ID3DBlob *vertexShaderBuffer = NULL, *pixelShaderBuffer = NULL;
 	D3D11_BUFFER_DESC matrixBufferDesc;
 
 	unsigned int numElements;
 
-	if (FAILED(D3DReadFileToBlob(L"shader/VertexShader.cso", &vertexShaderBuffer))) return false;
-	if (FAILED(D3DReadFileToBlob(L"shader/PixelShader.cso", &pixelShaderBuffer))) return false;
+	if (FAILED(D3DReadFileToBlob(vertexShader.c_str(), &vertexShaderBuffer))) return false;
+	if (FAILED(D3DReadFileToBlob(pixelShader.c_str(), &pixelShaderBuffer))) return false;
 	if (FAILED(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_VertexShader))) return false;
 	if (FAILED(device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_PixelShader))) return false;
 	
@@ -60,7 +60,7 @@ void Shader::cleanup() {
 	if (m_LightBuffer) m_LightBuffer->Release();
 }
 
-bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour) {
+bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour) {
 	if (!setParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, camPos, lightPos, lightCol, ambientColour))
 		return false;
 
@@ -73,7 +73,7 @@ bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATR
 	return true;
 }
 
-bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour) {
+bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX &worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour) {
 	D3D11_MAPPED_SUBRESOURCE mapMatrix, mapLight;
 	MatrixBuffer *matrixPtr;
 	LightBuffer  *lightPtr;

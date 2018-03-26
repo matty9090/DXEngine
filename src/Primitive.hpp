@@ -21,7 +21,7 @@ class Primitive {
 		Primitive(ID3D11Device *device, Shader *shader);
 		~Primitive();
 
-		void render(ID3D11DeviceContext *deviceContext, D3DXMATRIX viewMatrix, D3DXMATRIX projMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour);
+		void render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour) const;
 		void cleanup();
 
 		void move(Vec3<float> p);
@@ -31,6 +31,7 @@ class Primitive {
 		void setColour(Vec3<float> colour);
 
 		int getIndexCount() { return m_IndexCount; }
+		int getVertexCount() { return m_VertexCount; }
 
 		D3DMATRIX getWorldMatrix() { return m_WorldMatrix; }
 		Shader *getShader() { return m_Shader; }
@@ -43,6 +44,7 @@ class Primitive {
 		D3DXMATRIX m_WorldMatrix, m_MatrixMov;
 		D3DXMATRIX m_RotX, m_RotY, m_RotZ;
 		D3DXMATRIX m_ScaleMatrix;
+
 		D3D_PRIMITIVE_TOPOLOGY m_Topology;
 
 		Vec3<float> m_Pos, m_Rot;
