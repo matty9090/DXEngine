@@ -25,5 +25,5 @@ class Camera {
 		float m_Pitch, m_Yaw;
 
 		D3DXVECTOR3 m_Pos, m_Forward, m_Right;
-		D3DXMATRIX m_ViewMatrix;
+		D3DXMATRIX m_ViewMatrix, m_Trans, m_RotX, m_RotY, m_RotZ;
 };

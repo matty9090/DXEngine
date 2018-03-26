@@ -43,6 +43,8 @@ bool Primitive::init(ID3D11Device *device, Shader *shader) {
 	D3DXMatrixTranslation(&m_MatrixMov, 0, 0, 0);
 	D3DXMatrixScaling(&m_ScaleMatrix, 0.1f, 0.1f, 0.2f);
 
+	rotate(Vec3<float>(0.0f, 0.0f, 0.0f));
+
 	initData(device, m_Vertices, m_Indices);
 
 	return true;
@@ -67,19 +69,19 @@ void Primitive::cleanup() {
 	if (m_VertexBuffer) m_VertexBuffer->Release();
 }
 
-void Primitive::setPosition(Vec3<float> pos) {
+void Primitive::setPosition(Vec3<float> &pos) {
 	m_Pos = pos;
 	D3DXMatrixTranslation(&m_MatrixMov, m_Pos.x, m_Pos.y, m_Pos.z);
-	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov;
+	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
 }
 
-void Primitive::setPosition(D3DXVECTOR3 pos) {
+void Primitive::setPosition(D3DXVECTOR3 &pos) {
 	m_Pos = Vec3<float>(pos.x, pos.y, pos.z);
 	D3DXMatrixTranslation(&m_MatrixMov, m_Pos.x, m_Pos.y, m_Pos.z);
-	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov;
+	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
 }
 
-void Primitive::setColour(Vec3<float> colour) {
+void Primitive::setColour(Vec3<float> &colour) {
 	for (auto &vertex : m_Vertices)
 		vertex.color = D3DXVECTOR4(colour.x, colour.y, colour.z, 1.0f);
 
@@ -87,15 +89,15 @@ void Primitive::setColour(Vec3<float> colour) {
 	initData(m_Device, m_Vertices, m_Indices);
 }
 
-void Primitive::move(Vec3<float> p) {
+void Primitive::move(Vec3<float> &p) {
 	m_Pos += p;
 
 	D3DXMatrixTranslation(&m_MatrixMov, m_Pos.x, m_Pos.y, m_Pos.z);
 
-	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov /* * m_RotZ * m_RotX * m_RotY*/;
+	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
 }
 
-void Primitive::rotate(Vec3<float> r) {
+void Primitive::rotate(Vec3<float> &r) {
 	m_Rot += r;
 
 	D3DXMatrixRotationX(&m_RotX, m_Rot.x);
