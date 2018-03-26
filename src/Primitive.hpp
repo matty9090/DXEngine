@@ -29,6 +29,8 @@ class Primitive {
 		void setPosition(Vec3<float> &pos);
 		void setPosition(D3DXVECTOR3 &pos);
 		void setColour(Vec3<float> &colour);
+		void setScale(float scale);
+		void setScale(Vec3<float> &scale);
 
 		int getIndexCount() { return m_IndexCount; }
 		int getVertexCount() { return m_VertexCount; }

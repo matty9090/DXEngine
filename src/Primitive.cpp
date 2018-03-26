@@ -41,7 +41,7 @@ bool Primitive::init(ID3D11Device *device, Shader *shader) {
 
 	D3DXMatrixIdentity(&m_WorldMatrix);
 	D3DXMatrixTranslation(&m_MatrixMov, 0, 0, 0);
-	D3DXMatrixScaling(&m_ScaleMatrix, 0.1f, 0.1f, 0.2f);
+	D3DXMatrixScaling(&m_ScaleMatrix, 1.0f, 1.0f, 1.0f);
 
 	rotate(Vec3<float>(0.0f, 0.0f, 0.0f));
 
@@ -87,6 +87,16 @@ void Primitive::setColour(Vec3<float> &colour) {
 
 	cleanup();
 	initData(m_Device, m_Vertices, m_Indices);
+}
+
+void Primitive::setScale(float scale) {
+	D3DXMatrixScaling(&m_ScaleMatrix, scale, scale, scale);
+	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
+}
+
+void Primitive::setScale(Vec3<float>& scale) {
+	D3DXMatrixScaling(&m_ScaleMatrix, scale.x, scale.y, scale.z);
+	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
 }
 
 void Primitive::move(Vec3<float> &p) {
