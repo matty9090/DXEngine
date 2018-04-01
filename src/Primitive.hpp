@@ -7,15 +7,6 @@
 #include "Vec3.hpp"
 #include "Shader.hpp"
 
-struct Rect {
-	float x, y;
-	float x2, y2;
-
-	bool contains(float i, float j) {
-		return (i <= x2 && i >= x && j <= y2 && j >= y);
-	}
-};
-
 class Primitive {
 	public:
 		Primitive(ID3D11Device *device, Shader *shader);
@@ -52,8 +43,9 @@ class Primitive {
 		Vec3<float> m_Pos, m_Rot;
 		Shader *m_Shader;
 
+		unsigned int m_VertexSize;
 		int m_VertexCount, m_IndexCount;
-		
+
 		struct Vertex {
 			D3DXVECTOR3 position;
 			D3DXVECTOR3 normal;
@@ -61,7 +53,7 @@ class Primitive {
 		};
 
 		std::vector<Vertex> m_Vertices;
-		std::vector<unsigned long> m_Indices;
+		std::vector<WORD> m_Indices;
 
 		virtual void init() = 0;
 		void initMatrices();

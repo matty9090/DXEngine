@@ -20,14 +20,10 @@ void Primitive::initMatrices() {
 }
 
 void Primitive::render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour) const {
-	unsigned int stride;
-	unsigned int offset;
-
-	stride = sizeof(Vertex);
-	offset = 0;
-
-	deviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &stride, &offset);
-	deviceContext->IASetIndexBuffer(m_IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	UINT offset = 0;
+	
+	deviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &m_VertexSize, &offset);
+	deviceContext->IASetIndexBuffer(m_IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	deviceContext->IASetPrimitiveTopology(m_Topology);
 
 	m_Shader->render(deviceContext, m_IndexCount, m_WorldMatrix, viewMatrix, projMatrix, camPos, lightPos, lightCol, ambientColour);
@@ -105,7 +101,7 @@ bool Primitive::initData() {
 		return false;
 
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	indexBufferDesc.ByteWidth = sizeof(unsigned long) * m_IndexCount;
+	indexBufferDesc.ByteWidth = sizeof(WORD) * m_IndexCount;
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	indexBufferDesc.CPUAccessFlags = 0;
 	indexBufferDesc.MiscFlags = 0;
@@ -145,4 +141,5 @@ void Cube::init() {
 
 	m_VertexCount = m_Vertices.size();
 	m_IndexCount = m_Indices.size();
+	m_VertexSize = sizeof(Vertex);
 }

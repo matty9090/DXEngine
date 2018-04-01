@@ -7,6 +7,7 @@
 #include "Input.hpp"
 #include "Graphics.hpp"
 #include "Primitive.hpp"
+#include "Model.hpp"
 
 #include <D3D10.h>
 #include <D3DX10.h>

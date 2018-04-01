@@ -2,42 +2,43 @@
 
 #include <fstream>
 
-Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader) {
+Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, bool should_init) {
 	m_VertexShader = NULL;
 	m_PixelShader = NULL;
 	m_Layout = NULL;
 	m_MatrixBuffer = NULL;
 	m_LightBuffer = NULL;
 
-	init(device, vertexShader, pixelShader);
+	D3DReadFileToBlob(vertexShader.c_str(), &m_VertexShaderBuffer);
+	D3DReadFileToBlob(pixelShader.c_str(), &m_PixelShaderBuffer);
+	device->CreateVertexShader(m_VertexShaderBuffer->GetBufferPointer(), m_VertexShaderBuffer->GetBufferSize(), NULL, &m_VertexShader);
+	device->CreatePixelShader(m_PixelShaderBuffer->GetBufferPointer(), m_PixelShaderBuffer->GetBufferSize(), NULL, &m_PixelShader);
+
+	if(should_init)
+		init(device, vertexShader, pixelShader);
 }
 
-bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader) {
+bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, ID3D11InputLayout *layout) {
 	ID3D10Blob *errorMessage = NULL;
-	ID3DBlob *vertexShaderBuffer = NULL, *pixelShaderBuffer = NULL;
-	D3D11_BUFFER_DESC matrixBufferDesc;
-
-	unsigned int numElements;
-
-	if (FAILED(D3DReadFileToBlob(vertexShader.c_str(), &vertexShaderBuffer))) return false;
-	if (FAILED(D3DReadFileToBlob(pixelShader.c_str(), &pixelShaderBuffer))) return false;
-	if (FAILED(device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_VertexShader))) return false;
-	if (FAILED(device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_PixelShader))) return false;
+	D3D11_BUFFER_DESC matrixBufferDesc, lightBufferDesc;
 	
-	D3D11_INPUT_ELEMENT_DESC vertexLayout[] = {
-		// Semantic   Index  Format							 Slot   Offset	Slot Class					 Instance Step
-		{ "POSITION", 0,	 DXGI_FORMAT_R32G32B32_FLOAT,	 0,		0,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL",	  0,	 DXGI_FORMAT_R32G32B32_FLOAT,	 0,		12,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR",    0,	 DXGI_FORMAT_R32G32B32A32_FLOAT, 0,		24,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
+	if (!layout) {
+		D3D11_INPUT_ELEMENT_DESC vertexLayout[] = {
+			// Semantic   Index  Format							 Slot   Offset	Slot Class					 Instance Step
+			{ "POSITION", 0,	 DXGI_FORMAT_R32G32B32_FLOAT,	 0,		0,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "NORMAL",	  0,	 DXGI_FORMAT_R32G32B32_FLOAT,	 0,		12,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+			{ "COLOR",    0,	 DXGI_FORMAT_R32G32B32A32_FLOAT, 0,		24,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		};
 
-	numElements = sizeof(vertexLayout) / sizeof(vertexLayout[0]);
+		unsigned int numElements = sizeof(vertexLayout) / sizeof(vertexLayout[0]);
 
-	if (FAILED(device->CreateInputLayout(vertexLayout, numElements, vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), &m_Layout)))
-		return false;
+		if (FAILED(device->CreateInputLayout(vertexLayout, numElements, m_VertexShaderBuffer->GetBufferPointer(), m_VertexShaderBuffer->GetBufferSize(), &m_Layout)))
+			return false;
+	} else
+		m_Layout = layout;
 
-	vertexShaderBuffer->Release();
-	pixelShaderBuffer->Release();
+	m_VertexShaderBuffer->Release();
+	m_PixelShaderBuffer->Release();
 
 	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 	matrixBufferDesc.ByteWidth = sizeof(MatrixBuffer);
@@ -46,8 +47,15 @@ bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring 
 	matrixBufferDesc.MiscFlags = 0;
 	matrixBufferDesc.StructureByteStride = 0;
 
+	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	lightBufferDesc.ByteWidth = sizeof(LightBuffer);
+	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	lightBufferDesc.MiscFlags = 0;
+	lightBufferDesc.StructureByteStride = 0;
+
 	if (FAILED(device->CreateBuffer(&matrixBufferDesc, NULL, &m_MatrixBuffer))) return false;
-	if (FAILED(device->CreateBuffer(&matrixBufferDesc, NULL, &m_LightBuffer))) return false;
+	if (FAILED(device->CreateBuffer(&lightBufferDesc, NULL, &m_LightBuffer))) return false;
 
 	return true;
 }
@@ -67,7 +75,7 @@ bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATR
 	deviceContext->IASetInputLayout(m_Layout);
 	deviceContext->VSSetShader(m_VertexShader, NULL, 0);
 	deviceContext->PSSetShader(m_PixelShader, NULL, 0);
-
+	
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 
 	return true;
