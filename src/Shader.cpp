@@ -2,12 +2,13 @@
 
 #include <fstream>
 
-Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, bool should_init) {
+Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, bool should_init) : m_Device(device) {
 	m_VertexShader = NULL;
 	m_PixelShader = NULL;
 	m_Layout = NULL;
 	m_MatrixBuffer = NULL;
 	m_LightBuffer = NULL;
+	m_Texture = NULL;
 
 	D3DReadFileToBlob(vertexShader.c_str(), &m_VertexShaderBuffer);
 	D3DReadFileToBlob(pixelShader.c_str(), &m_PixelShaderBuffer);
@@ -57,6 +58,18 @@ bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring 
 	if (FAILED(device->CreateBuffer(&matrixBufferDesc, NULL, &m_MatrixBuffer))) return false;
 	if (FAILED(device->CreateBuffer(&lightBufferDesc, NULL, &m_LightBuffer))) return false;
 
+	D3D11_SAMPLER_DESC samplerDesc;
+	ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
+	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MaxAnisotropy = 16;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	device->CreateSamplerState(&samplerDesc, &m_Sampler);
+
 	return true;
 }
 
@@ -68,6 +81,10 @@ void Shader::cleanup() {
 	if (m_LightBuffer) m_LightBuffer->Release();
 }
 
+void Shader::setTexture(std::string tex) {
+	D3DX11CreateShaderResourceViewFromFileA(m_Device, tex.c_str(), NULL, NULL, &m_Texture, NULL);
+}
+
 bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour) {
 	if (!setParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, camPos, lightPos, lightCol, ambientColour))
 		return false;
@@ -75,7 +92,8 @@ bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATR
 	deviceContext->IASetInputLayout(m_Layout);
 	deviceContext->VSSetShader(m_VertexShader, NULL, 0);
 	deviceContext->PSSetShader(m_PixelShader, NULL, 0);
-	
+	deviceContext->PSSetSamplers(0, 1, &m_Sampler);
+
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 
 	return true;
@@ -111,6 +129,9 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	deviceContext->Unmap(m_LightBuffer, 0);
 
 	bufferNumber = 0;
+
+	if(m_Texture)
+		deviceContext->PSSetShaderResources(0, 1, &m_Texture);
 
 	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_MatrixBuffer);
 	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_LightBuffer);

@@ -129,6 +129,11 @@ bool Model::load(std::string file, bool tangents) {
 	if (FAILED(m_Device->CreateBuffer(&indexBufferDesc, &indexData, &m_IndexBuffer)))
 		return false;
 
+	gen::SMeshMaterial mat;
+	mesh.GetMaterial(0, &mat);
+
+	m_Shader->setTexture("res/" + mat.textureFileNames[0]);
+
 	return true;
 }
 
