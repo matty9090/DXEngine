@@ -7,6 +7,13 @@
 
 #include <string>
 
+struct DXShader {
+	std::wstring vertex, pixel;
+
+	DXShader() {}
+	DXShader(std::wstring v, std::wstring p) : vertex(v), pixel(p) {}
+};
+
 class Shader {
 	public:
 		Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, bool should_init = true);

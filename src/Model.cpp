@@ -6,10 +6,11 @@
 
 #include <iostream>
 
-int (WINAPIV * __vsnprintf)(char *, size_t, const char*, va_list) = _vsnprintf;
+Model::Model(ID3D11Device *device, DXShader shader) : Primitive(device, DXShader()) {
+	m_VertexShader = shader.vertex;
+	m_PixelShader  = shader.pixel;
 
-Model::Model(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader) : Primitive(device, NULL), m_VertexShader(vertexShader), m_PixelShader(pixelShader) {
-	m_Shader = new Shader(device, vertexShader, pixelShader, false);
+	m_Shader = new Shader(device, m_VertexShader, m_PixelShader, false);
 }
 
 bool Model::load(std::string file, bool tangents) {

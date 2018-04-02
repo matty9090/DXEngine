@@ -4,7 +4,7 @@
 
 class Model : public Primitive {
 	public:
-		Model(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader);
+		Model(ID3D11Device *device, DXShader shader);
 		~Model();
 
 		void init() {}

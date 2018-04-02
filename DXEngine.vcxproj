@@ -153,6 +153,7 @@
     <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CVector4.cpp" />
     <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\MathIO.cpp" />
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\DXEngine.cpp" />
     <ClCompile Include="src\Graphics.cpp" />
     <ClCompile Include="src\Input.cpp" />
     <ClCompile Include="src\Model.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="src\DXEngine.hpp" />
     <ClInclude Include="src\Graphics.hpp" />
     <ClInclude Include="src\Input.hpp" />
+    <ClInclude Include="src\Light.hpp" />
     <ClInclude Include="src\Model.hpp" />
     <ClInclude Include="src\Primitive.hpp" />
     <ClInclude Include="src\resource.h" />
