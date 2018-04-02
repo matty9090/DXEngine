@@ -15,12 +15,16 @@ DXEngine::~DXEngine() {
 }
 
 void DXEngine::render() {
+	m_Graphics->beginScene();
+
 	D3DXMATRIX viewMatrix;
 	m_Camera->render();
 	m_Camera->getViewMatrix(viewMatrix);
 
 	for (auto &obj : m_Objects)
 		obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Camera->getDxPosition(), m_Lights[0]->pos, m_Lights[0]->colour, m_Ambient);
+
+	m_Graphics->endScene();
 }
 
 void DXEngine::createLight(Light *light) {

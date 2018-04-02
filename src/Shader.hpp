@@ -28,20 +28,21 @@ class Shader {
 
 	private:
 		struct MatrixBuffer {
-			D3DXMATRIX world;		// 64 bytes
-			D3DXMATRIX view;		// 64 bytes
-			D3DXMATRIX projection;  // 64 bytes
+			D3DXMATRIX  world;		// 64 bytes
+			D3DXMATRIX  view;		// 64 bytes
+			D3DXMATRIX  projection; // 64 bytes
+			D3DXVECTOR3 camPos;		// 12 bytes
+
+			float pad0;
 		};
 
 		struct LightBuffer {
-			D3DXVECTOR3 camPos;		// 12 bytes
-			float pad0;
 			D3DXVECTOR3 lightPos;	// 12 bytes
-			float pad1;
+			float pad0;
 			D3DXVECTOR3 lightCol;   // 12 bytes
-			float pad2;
+			float pad1;
 			D3DXVECTOR3 ambientCol;	// 12 bytes
-			float pad3;
+			float pad2;
 		};
 
 		ID3D11Device *m_Device;

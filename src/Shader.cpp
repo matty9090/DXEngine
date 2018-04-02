@@ -115,6 +115,7 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	matrixPtr->world		= worldMatrix;
 	matrixPtr->view			= viewMatrix;
 	matrixPtr->projection	= projectionMatrix;
+	matrixPtr->camPos		= camPos;
 
 	deviceContext->Unmap(m_MatrixBuffer, 0);
 
@@ -122,19 +123,17 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 
 	lightPtr = (LightBuffer*)mapLight.pData;
 	lightPtr->lightPos		= lightPos;
-	lightPtr->camPos		= camPos;
 	lightPtr->lightCol		= lightCol;
 	lightPtr->ambientCol	= ambientColour;
 
 	deviceContext->Unmap(m_LightBuffer, 0);
 
-	bufferNumber = 0;
-
 	if(m_Texture)
 		deviceContext->PSSetShaderResources(0, 1, &m_Texture);
 
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_MatrixBuffer);
-	deviceContext->PSSetConstantBuffers(bufferNumber, 1, &m_LightBuffer);
+	deviceContext->VSSetConstantBuffers(0, 1, &m_MatrixBuffer);
+	deviceContext->PSSetConstantBuffers(0, 1, &m_MatrixBuffer);
+	deviceContext->PSSetConstantBuffers(1, 1, &m_LightBuffer);
 
 	return true;
 }
