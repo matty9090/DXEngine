@@ -20,7 +20,7 @@ class DXEngine {
 		~DXEngine();
 
 		void render();
-		void setAmbientColour(Colour col) { m_Ambient = col; }
+		void setAmbientColour(Colour col) { m_Lighting.ambient = col; }
 
 		void    createLight(Light *light);
 		Cube   *createCube(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -33,7 +33,7 @@ class DXEngine {
 
 		Graphics *m_Graphics;
 		Camera *m_Camera;
-		Colour m_Ambient;
+		SceneLighting m_Lighting;
 
 		std::vector<Light*> m_Lights;
 		std::vector<Primitive*> m_Objects;

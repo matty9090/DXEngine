@@ -49,7 +49,7 @@ bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring 
 	matrixBufferDesc.StructureByteStride = 0;
 
 	lightBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-	lightBufferDesc.ByteWidth = sizeof(LightBuffer);
+	lightBufferDesc.ByteWidth = sizeof(SceneLighting);
 	lightBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	lightBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	lightBufferDesc.MiscFlags = 0;
@@ -85,8 +85,8 @@ void Shader::setTexture(std::string tex) {
 	D3DX11CreateShaderResourceViewFromFileA(m_Device, tex.c_str(), NULL, NULL, &m_Texture, NULL);
 }
 
-bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour) {
-	if (!setParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, camPos, lightPos, lightCol, ambientColour))
+bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting) {
+	if (!setParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, camPos, lighting))
 		return false;
 
 	deviceContext->IASetInputLayout(m_Layout);
@@ -99,10 +99,10 @@ bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATR
 	return true;
 }
 
-bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour) {
+bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, SceneLighting lighting) {
 	D3D11_MAPPED_SUBRESOURCE mapMatrix, mapLight;
 	MatrixBuffer *matrixPtr;
-	LightBuffer  *lightPtr;
+	SceneLighting  *lightPtr;
 	unsigned int bufferNumber;
 
 	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
@@ -121,10 +121,10 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 
 	if (FAILED(deviceContext->Map(m_LightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapLight))) return false;
 
-	lightPtr = (LightBuffer*)mapLight.pData;
-	lightPtr->lightPos		= lightPos;
-	lightPtr->lightCol		= lightCol;
-	lightPtr->ambientCol	= ambientColour;
+	lightPtr = (SceneLighting*)mapLight.pData;
+	lightPtr->ambient = lighting.ambient;
+
+	memcpy(mapLight.pData, &lighting.lights[0], sizeof(Light) * 2);
 
 	deviceContext->Unmap(m_LightBuffer, 0);
 

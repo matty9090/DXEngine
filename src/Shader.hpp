@@ -7,6 +7,8 @@
 
 #include <string>
 
+#include "Light.hpp"
+
 struct DXShader {
 	std::wstring vertex, pixel;
 
@@ -20,7 +22,7 @@ class Shader {
 		~Shader();
 		
 		bool init(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, ID3D11InputLayout *layout = NULL);
-		bool render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour);
+		bool render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting);
 		void setTexture(std::string tex);
 		void cleanup();
 
@@ -36,15 +38,6 @@ class Shader {
 			float pad0;
 		};
 
-		struct LightBuffer {
-			D3DXVECTOR3 lightPos;	// 12 bytes
-			float pad0;
-			D3DXVECTOR3 lightCol;   // 12 bytes
-			float pad1;
-			D3DXVECTOR3 ambientCol;	// 12 bytes
-			float pad2;
-		};
-
 		ID3D11Device *m_Device;
 		ID3D11VertexShader *m_VertexShader;
 		ID3D11PixelShader *m_PixelShader;
@@ -54,6 +47,6 @@ class Shader {
 		ID3D11ShaderResourceView *m_Texture;
 		ID3D11SamplerState *m_Sampler;
 		
-		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR3 lightPos, D3DXVECTOR3 lightCol, D3DXVECTOR3 ambientColour);
+		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, SceneLighting lighting);
 		void handleErrors(ID3D10Blob *errorMessage, char *shaderFilename);
 };

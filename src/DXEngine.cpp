@@ -1,7 +1,7 @@
 #include "DXEngine.hpp"
 
 DXEngine::DXEngine(Graphics *graphics) : m_Device(graphics->getDevice()), m_Context(graphics->getDeviceContext()), m_Graphics(graphics) {
-	m_Ambient = Colour(0.05f, 0.05f, 0.05f);
+	m_Lighting.ambient = Colour(0.05f, 0.05f, 0.05f);
 }
 
 DXEngine::~DXEngine() {
@@ -22,13 +22,14 @@ void DXEngine::render() {
 	m_Camera->getViewMatrix(viewMatrix);
 
 	for (auto &obj : m_Objects)
-		obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Camera->getDxPosition(), m_Lights[0]->pos, m_Lights[0]->colour, m_Ambient);
+		obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Camera->getDxPosition(), m_Lighting);
 
 	m_Graphics->endScene();
 }
 
 void DXEngine::createLight(Light *light) {
 	m_Lights.push_back(light);
+	m_Lighting.lights[m_Lights.size() - 1] = *light;
 }
 
 Cube *DXEngine::createCube(DXShader shader, D3DXVECTOR3 position) {

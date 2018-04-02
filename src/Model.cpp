@@ -33,12 +33,12 @@ bool Model::load(std::string file, bool tangents) {
 	unsigned int numElts = 0;
 	unsigned int offset = 0;
 
-	m_VertexElts[numElts].SemanticName = "POSITION";   // Semantic in HLSL (what is this data for)
-	m_VertexElts[numElts].SemanticIndex = 0;           // Index to add to semantic (a count for this kind of data, when using multiple of the same type, e.g. TEXCOORD0, TEXCOORD1)
-	m_VertexElts[numElts].Format = DXGI_FORMAT_R32G32B32_FLOAT; // Type of data - this one will be a float3 in the shader. Most data communicated as though it were colours
-	m_VertexElts[numElts].AlignedByteOffset = offset;  // Offset of element from start of vertex data (e.g. if we have position (float3), uv (float2) then normal, the normal's offset is 5 floats = 5*4 = 20)
-	m_VertexElts[numElts].InputSlot = 0;               // For when using multiple vertex buffers (e.g. instancing - an advanced topic)
-	m_VertexElts[numElts].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA; // Use this value for most cases (only changed for instancing)
+	m_VertexElts[numElts].SemanticName = "POSITION";
+	m_VertexElts[numElts].SemanticIndex = 0;
+	m_VertexElts[numElts].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	m_VertexElts[numElts].AlignedByteOffset = offset;
+	m_VertexElts[numElts].InputSlot = 0;
+	m_VertexElts[numElts].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	m_VertexElts[numElts].InstanceDataStepRate = 0;
 
 	offset += 12;

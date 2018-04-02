@@ -22,14 +22,14 @@ void Primitive::initMatrices() {
 	rotate(Vec3<float>(0.0f, 0.0f, 0.0f));
 }
 
-void Primitive::render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR3 &lightPos, D3DXVECTOR3 &lightCol, D3DXVECTOR3 &ambientColour) const {
+void Primitive::render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting) const {
 	UINT offset = 0;
 	
 	deviceContext->IASetVertexBuffers(0, 1, &m_VertexBuffer, &m_VertexSize, &offset);
 	deviceContext->IASetIndexBuffer(m_IndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	deviceContext->IASetPrimitiveTopology(m_Topology);
 
-	m_Shader->render(deviceContext, m_IndexCount, m_WorldMatrix, viewMatrix, projMatrix, camPos, lightPos, lightCol, ambientColour);
+	m_Shader->render(deviceContext, m_IndexCount, m_WorldMatrix, viewMatrix, projMatrix, camPos, lighting);
 }
 
 void Primitive::cleanup() {
