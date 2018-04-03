@@ -15,6 +15,9 @@ DXEngine::~DXEngine() {
 }
 
 void DXEngine::render() {
+	for (int i = 0; i < m_Lights.size(); ++i)
+		m_Lighting.lights[i] = *m_Lights[i];
+
 	D3DXMATRIX viewMatrix;
 	m_Camera->render();
 	m_Camera->getViewMatrix(viewMatrix);

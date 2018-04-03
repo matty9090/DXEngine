@@ -26,6 +26,8 @@ class Primitive {
 		int getIndexCount() { return m_IndexCount; }
 		int getVertexCount() { return m_VertexCount; }
 
+		D3DXVECTOR3 getPosition() { return D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z); }
+
 		D3DMATRIX getWorldMatrix() { return m_WorldMatrix; }
 		Shader *getShader() { return m_Shader; }
 		ID3D11Device *getDevice() { return m_Device; }

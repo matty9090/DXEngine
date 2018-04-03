@@ -6,7 +6,7 @@ typedef D3DXVECTOR3 Colour;
 
 struct Light {
 	D3DXVECTOR3 pos;
-	float pad0;
+	float power;
 	Colour colour;
 	float pad1;
 };
