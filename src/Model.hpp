@@ -12,6 +12,7 @@ class Model : public Primitive {
 
 		void setCullMode(D3D11_CULL_MODE cull);
 		void setBlend(int blend);
+		void setDepth(ID3D11DepthStencilState *depth);
 
 	private:
 		ID3D11InputLayout *m_VertexLayout;

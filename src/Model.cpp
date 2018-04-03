@@ -21,6 +21,10 @@ void Model::setBlend(int blend) {
 	m_Shader->setBlendState(blend);
 }
 
+void Model::setDepth(ID3D11DepthStencilState *depth) {
+	m_Shader->setDepthState(depth);
+}
+
 bool Model::load(std::string file, bool tangents) {
 	cleanup();
 

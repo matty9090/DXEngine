@@ -34,6 +34,8 @@ class Graphics {
 		ID3D11Device *getDevice() { return m_Device; }
 		ID3D11DeviceContext *getDeviceContext() { return m_DeviceContext; }
 
+		ID3D11DepthStencilState *getDepthStateOn() { return m_DepthStencilStateOn; }
+		ID3D11DepthStencilState *getDepthStateOff() { return m_DepthStencilStateOff; }
 
 	private:
 		HWND m_Hwnd;
@@ -53,7 +55,7 @@ class Graphics {
 		ID3D11DeviceContext *m_DeviceContext;
 		ID3D11RenderTargetView *m_RenderTargetView;
 		ID3D11Texture2D *m_DepthStencilBuffer;
-		ID3D11DepthStencilState *m_DepthStencilState;
+		ID3D11DepthStencilState *m_DepthStencilStateOn, *m_DepthStencilStateOff;
 		ID3D11DepthStencilView *m_DepthStencilView;
 		ID3D11RasterizerState *m_RasterState;
 

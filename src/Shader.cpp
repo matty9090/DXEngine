@@ -9,6 +9,9 @@ Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pix
 	m_MatrixBuffer = NULL;
 	m_LightBuffer = NULL;
 	m_Texture = NULL;
+	m_DepthState = NULL;
+	m_Blend = NULL;
+	m_Sampler = NULL;
 
 	D3DReadFileToBlob(vertexShader.c_str(), &m_VertexShaderBuffer);
 	D3DReadFileToBlob(pixelShader.c_str(), &m_PixelShaderBuffer);
@@ -149,6 +152,9 @@ bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATR
 	deviceContext->RSSetState(m_Raster);
 	deviceContext->OMSetBlendState(m_Blend, 0, 0xFFFFFFFF);
 	
+	if(m_DepthState)
+		deviceContext->OMSetDepthStencilState(m_DepthState, 1);
+
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 
 	return true;

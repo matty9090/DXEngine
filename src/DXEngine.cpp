@@ -40,6 +40,7 @@ Cube *DXEngine::createCube(DXShader shader, D3DXVECTOR3 position) {
 Model *DXEngine::createModel(DXShader shader, D3DXVECTOR3 position) {
 	Model *model = new Model(m_Device, shader);
 	model->setPosition(position);
+	model->setDepth(m_Graphics->getDepthStateOn());
 
 	m_Objects.push_back(model);
 
