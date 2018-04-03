@@ -9,6 +9,9 @@ Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pix
 	m_MatrixBuffer = NULL;
 	m_LightBuffer = NULL;
 	m_Texture = NULL;
+	m_NormalMap = NULL;
+	m_ParallaxMap = NULL;
+	m_SpecularMap = NULL;
 	m_DepthState = NULL;
 	m_Blend = NULL;
 	m_Sampler = NULL;
@@ -141,6 +144,18 @@ void Shader::setTexture(std::string tex) {
 	D3DX11CreateShaderResourceViewFromFileA(m_Device, tex.c_str(), NULL, NULL, &m_Texture, NULL);
 }
 
+void Shader::setNormalMap(std::string tex) {
+	D3DX11CreateShaderResourceViewFromFileA(m_Device, tex.c_str(), NULL, NULL, &m_NormalMap, NULL);
+}
+
+void Shader::setSpecularMap(std::string tex) {
+	D3DX11CreateShaderResourceViewFromFileA(m_Device, tex.c_str(), NULL, NULL, &m_SpecularMap, NULL);
+}
+
+void Shader::setParallaxMap(std::string tex) {
+	D3DX11CreateShaderResourceViewFromFileA(m_Device, tex.c_str(), NULL, NULL, &m_ParallaxMap, NULL);
+}
+
 bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting) {
 	if (!setParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, camPos, lighting))
 		return false;
@@ -188,8 +203,10 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 
 	deviceContext->Unmap(m_LightBuffer, 0);
 
-	if(m_Texture)
-		deviceContext->PSSetShaderResources(0, 1, &m_Texture);
+	if (m_Texture)		deviceContext->PSSetShaderResources(0, 1, &m_Texture);
+	if (m_NormalMap)	deviceContext->PSSetShaderResources(1, 1, &m_NormalMap);
+	if (m_SpecularMap)	deviceContext->PSSetShaderResources(2, 1, &m_SpecularMap);
+	if (m_ParallaxMap)	deviceContext->PSSetShaderResources(3, 1, &m_ParallaxMap);
 
 	deviceContext->VSSetConstantBuffers(0, 1, &m_MatrixBuffer);
 	deviceContext->PSSetConstantBuffers(0, 1, &m_MatrixBuffer);

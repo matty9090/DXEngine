@@ -23,9 +23,12 @@ class Shader {
 		
 		bool init(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, ID3D11InputLayout *layout = NULL);
 		bool render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting);
-		void setTexture(std::string tex);
 		void cleanup();
 
+		void setTexture(std::string tex);
+		void setNormalMap(std::string tex);
+		void setSpecularMap(std::string tex);
+		void setParallaxMap(std::string tex);
 		void setSamplerState();
 		void setBlendState(int blend);
 		void setRasterState(D3D11_CULL_MODE cull, bool wireframe = false);
@@ -50,7 +53,7 @@ class Shader {
 		ID3D11InputLayout *m_Layout;
 		ID3D11Buffer *m_MatrixBuffer, *m_LightBuffer;
 		ID3DBlob *m_VertexShaderBuffer = NULL, *m_PixelShaderBuffer = NULL;
-		ID3D11ShaderResourceView *m_Texture;
+		ID3D11ShaderResourceView *m_Texture, *m_NormalMap, *m_SpecularMap, *m_ParallaxMap;
 		ID3D11SamplerState *m_Sampler;
 		ID3D11RasterizerState *m_Raster;
 		ID3D11BlendState *m_Blend;

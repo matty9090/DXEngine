@@ -145,7 +145,7 @@ bool Model::load(std::string file, bool tangents) {
 	gen::SMeshMaterial mat;
 	mesh.GetMaterial(0, &mat);
 
-	m_Shader->setTexture("res/" + mat.textureFileNames[0]);
+	setSkin("res/" + mat.textureFileNames[0]);
 
 	return true;
 }
