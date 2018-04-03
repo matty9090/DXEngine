@@ -5,8 +5,8 @@ DXEngine::DXEngine(Graphics *graphics) : m_Device(graphics->getDevice()), m_Cont
 }
 
 DXEngine::~DXEngine() {
-	for (auto &obj : m_Objects) delete obj;
-	for (auto &light : m_Lights) delete light;
+	for (auto &obj   : m_Objects) delete obj;
+	for (auto &light : m_Lights)  delete light;
 
 	delete m_Camera;
 
@@ -15,16 +15,12 @@ DXEngine::~DXEngine() {
 }
 
 void DXEngine::render() {
-	m_Graphics->beginScene();
-
 	D3DXMATRIX viewMatrix;
 	m_Camera->render();
 	m_Camera->getViewMatrix(viewMatrix);
 
 	for (auto &obj : m_Objects)
 		obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Camera->getDxPosition(), m_Lighting);
-
-	m_Graphics->endScene();
 }
 
 void DXEngine::createLight(Light *light) {

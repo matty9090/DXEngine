@@ -26,7 +26,13 @@ class Shader {
 		void setTexture(std::string tex);
 		void cleanup();
 
+		void setSamplerState();
+		void setBlendState(int blend);
+		void setRasterState(D3D11_CULL_MODE cull, bool wireframe = false);
+
 		ID3DBlob *getVertexShaderBuffer() { return m_VertexShaderBuffer; }
+
+		enum EBlendState { Additive, Alpha, None };
 
 	private:
 		struct MatrixBuffer {
@@ -34,8 +40,7 @@ class Shader {
 			D3DXMATRIX  view;		// 64 bytes
 			D3DXMATRIX  projection; // 64 bytes
 			D3DXVECTOR3 camPos;		// 12 bytes
-
-			float pad0;
+			float pad;				// 4  bytes
 		};
 
 		ID3D11Device *m_Device;
@@ -46,6 +51,8 @@ class Shader {
 		ID3DBlob *m_VertexShaderBuffer = NULL, *m_PixelShaderBuffer = NULL;
 		ID3D11ShaderResourceView *m_Texture;
 		ID3D11SamplerState *m_Sampler;
+		ID3D11RasterizerState *m_Raster;
+		ID3D11BlendState *m_Blend;
 		
 		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, SceneLighting lighting);
 		void handleErrors(ID3D10Blob *errorMessage, char *shaderFilename);

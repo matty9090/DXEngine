@@ -10,6 +10,9 @@ class Model : public Primitive {
 		void init() {}
 		bool load(std::string file, bool tangents = false);
 
+		void setCullMode(D3D11_CULL_MODE cull);
+		void setBlend(int blend);
+
 	private:
 		ID3D11InputLayout *m_VertexLayout;
 		D3D11_INPUT_ELEMENT_DESC m_VertexElts[64];

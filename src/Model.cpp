@@ -13,6 +13,14 @@ Model::Model(ID3D11Device *device, DXShader shader) : Primitive(device, DXShader
 	m_Shader = new Shader(device, m_VertexShader, m_PixelShader, false);
 }
 
+void Model::setCullMode(D3D11_CULL_MODE cull) {
+	m_Shader->setRasterState(cull);
+}
+
+void Model::setBlend(int blend) {
+	m_Shader->setBlendState(blend);
+}
+
 bool Model::load(std::string file, bool tangents) {
 	cleanup();
 
@@ -83,7 +91,7 @@ bool Model::load(std::string file, bool tangents) {
 	if (subMesh.hasVertexColours) {
 		m_VertexElts[numElts].SemanticName = "COLOR";
 		m_VertexElts[numElts].SemanticIndex = 0;
-		m_VertexElts[numElts].Format = DXGI_FORMAT_R8G8B8A8_UNORM; // A RGBA colour with 1 byte (0-255) per component
+		m_VertexElts[numElts].Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		m_VertexElts[numElts].AlignedByteOffset = offset;
 		m_VertexElts[numElts].InputSlot = 0;
 		m_VertexElts[numElts].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;

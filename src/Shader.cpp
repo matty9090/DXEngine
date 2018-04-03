@@ -58,17 +58,9 @@ bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring 
 	if (FAILED(device->CreateBuffer(&matrixBufferDesc, NULL, &m_MatrixBuffer))) return false;
 	if (FAILED(device->CreateBuffer(&lightBufferDesc, NULL, &m_LightBuffer))) return false;
 
-	D3D11_SAMPLER_DESC samplerDesc;
-	ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
-	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	samplerDesc.MaxAnisotropy = 16;
-	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-	device->CreateSamplerState(&samplerDesc, &m_Sampler);
+	setSamplerState();
+	setBlendState(Alpha);
+	setRasterState(D3D11_CULL_BACK);
 
 	return true;
 }
@@ -79,6 +71,67 @@ void Shader::cleanup() {
 	if (m_VertexShader) m_VertexShader->Release();
 	if (m_MatrixBuffer) m_MatrixBuffer->Release();
 	if (m_LightBuffer) m_LightBuffer->Release();
+}
+
+void Shader::setSamplerState() {
+	D3D11_SAMPLER_DESC samplerDesc;
+	ZeroMemory(&samplerDesc, sizeof(D3D11_SAMPLER_DESC));
+
+	samplerDesc.Filter = D3D11_FILTER_ANISOTROPIC;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.MaxAnisotropy = 16;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+	m_Device->CreateSamplerState(&samplerDesc, &m_Sampler);
+}
+
+void Shader::setBlendState(int blend) {
+	D3D11_BLEND_DESC blendState;
+	ZeroMemory(&blendState, sizeof(D3D11_BLEND_DESC));
+
+	if (blend == Alpha) {
+		blendState.RenderTarget[0].BlendEnable = TRUE;
+		blendState.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+		blendState.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		blendState.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendState.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
+		blendState.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+		blendState.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	} else if (blend == Additive) {
+		blendState.RenderTarget[0].BlendEnable = TRUE;
+		blendState.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		blendState.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+		blendState.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendState.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		blendState.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+		blendState.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+		blendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	} else {
+		blendState.RenderTarget[0].BlendEnable = FALSE;
+	}
+
+	m_Device->CreateBlendState(&blendState, &m_Blend);
+}
+
+void Shader::setRasterState(D3D11_CULL_MODE cull, bool wireframe) {
+	D3D11_RASTERIZER_DESC rasterDesc;
+
+	rasterDesc.AntialiasedLineEnable = false;
+	rasterDesc.CullMode = cull;
+	rasterDesc.DepthBias = 0;
+	rasterDesc.DepthBiasClamp = 0.0f;
+	rasterDesc.DepthClipEnable = true;
+	rasterDesc.FillMode = (wireframe) ? D3D11_FILL_WIREFRAME : D3D11_FILL_SOLID;
+	rasterDesc.FrontCounterClockwise = false;
+	rasterDesc.MultisampleEnable = false;
+	rasterDesc.ScissorEnable = false;
+	rasterDesc.SlopeScaledDepthBias = 0.0f;
+
+	m_Device->CreateRasterizerState(&rasterDesc, &m_Raster);
 }
 
 void Shader::setTexture(std::string tex) {
@@ -93,7 +146,9 @@ bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATR
 	deviceContext->VSSetShader(m_VertexShader, NULL, 0);
 	deviceContext->PSSetShader(m_PixelShader, NULL, 0);
 	deviceContext->PSSetSamplers(0, 1, &m_Sampler);
-
+	deviceContext->RSSetState(m_Raster);
+	deviceContext->OMSetBlendState(m_Blend, 0, 0xFFFFFFFF);
+	
 	deviceContext->DrawIndexed(indexCount, 0, 0);
 
 	return true;
@@ -103,7 +158,6 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	D3D11_MAPPED_SUBRESOURCE mapMatrix, mapLight;
 	MatrixBuffer *matrixPtr;
 	SceneLighting  *lightPtr;
-	unsigned int bufferNumber;
 
 	D3DXMatrixTranspose(&worldMatrix, &worldMatrix);
 	D3DXMatrixTranspose(&viewMatrix, &viewMatrix);
