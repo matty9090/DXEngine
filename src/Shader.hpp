@@ -45,11 +45,15 @@ class Shader {
 			D3DXMATRIX  world;		// 64 bytes
 			D3DXMATRIX  view;		// 64 bytes
 			D3DXMATRIX  projection; // 64 bytes
-			float values[5];		// 20  bytes
 			D3DXVECTOR3 camPos;		// 12 bytes
+			float pad;				// 4 bytes
+			float value1;			// 4 bytes
+			float value2;			// 4 bytes
+			float value3;			// 4 bytes
+			float value4;			// 4 bytes
 		};
 
-		float m_Values[5];
+		float m_Values[4];
 
 		ID3D11Device *m_Device;
 		ID3D11VertexShader *m_VertexShader;

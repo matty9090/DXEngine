@@ -16,6 +16,11 @@ Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pix
 	m_Blend = NULL;
 	m_Sampler = NULL;
 
+	m_Values[0] = 0;
+	m_Values[1] = 0;
+	m_Values[2] = 0;
+	m_Values[3] = 0;
+
 	D3DReadFileToBlob(vertexShader.c_str(), &m_VertexShaderBuffer);
 	D3DReadFileToBlob(pixelShader.c_str(), &m_PixelShaderBuffer);
 	device->CreateVertexShader(m_VertexShaderBuffer->GetBufferPointer(), m_VertexShaderBuffer->GetBufferSize(), NULL, &m_VertexShader);
@@ -191,9 +196,15 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	matrixPtr->view			= viewMatrix;
 	matrixPtr->projection	= projectionMatrix;
 	matrixPtr->camPos		= camPos;
+	matrixPtr->pad			= 0;
 
-	memcpy(matrixPtr->values, &m_Values[0], sizeof(float) * 5);
+	matrixPtr->value1		= m_Values[0];
+	matrixPtr->value2		= m_Values[1];
+	matrixPtr->value3		= m_Values[2];
+	matrixPtr->value4		= m_Values[3];
 
+	//memcpy(matrixPtr->values, m_Values, sizeof(float) * 4);
+	
 	deviceContext->Unmap(m_MatrixBuffer, 0);
 
 	if (FAILED(deviceContext->Map(m_LightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapLight))) return false;
@@ -201,7 +212,7 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	lightPtr = (SceneLighting*)mapLight.pData;
 	lightPtr->ambient = lighting.ambient;
 
-	memcpy(lightPtr->lights, &lighting.lights[0], sizeof(Light) * 2);
+	memcpy(lightPtr->lights, lighting.lights, sizeof(Light) * 2);
 
 	deviceContext->Unmap(m_LightBuffer, 0);
 
