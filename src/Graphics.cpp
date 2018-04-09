@@ -208,23 +208,9 @@ bool Graphics::initDepthBuffer() {
 	if (FAILED(m_Device->CreateDepthStencilState(&depthStencilDescOn, &m_DepthStencilStateOn)))
 		return false;
 
-	depthStencilDescOff.DepthEnable = false;
-	depthStencilDescOff.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilDescOff.DepthEnable = true;
+	depthStencilDescOff.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
 	depthStencilDescOff.DepthFunc = D3D11_COMPARISON_LESS;
-
-	depthStencilDescOff.StencilEnable = true;
-	depthStencilDescOff.StencilReadMask = 0xFF;
-	depthStencilDescOff.StencilWriteMask = 0xFF;
-
-	depthStencilDescOff.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-	depthStencilDescOff.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-	depthStencilDescOff.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	depthStencilDescOff.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-	depthStencilDescOff.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-	depthStencilDescOff.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-	depthStencilDescOff.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-	depthStencilDescOff.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 	if (FAILED(m_Device->CreateDepthStencilState(&depthStencilDescOff, &m_DepthStencilStateOff)))
 		return false;

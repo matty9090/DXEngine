@@ -6,6 +6,7 @@
 #include <d3dcompiler.h>
 
 #include <string>
+#include <vector>
 
 #include "Light.hpp"
 
@@ -34,6 +35,8 @@ class Shader {
 		void setRasterState(D3D11_CULL_MODE cull, bool wireframe = false);
 		void setDepthState(ID3D11DepthStencilState *depth) { m_DepthState = depth; }
 
+		//void addBuffer();
+
 		ID3DBlob *getVertexShaderBuffer() { return m_VertexShaderBuffer; }
 
 		enum EBlendState { Additive, Alpha, None };
@@ -58,6 +61,8 @@ class Shader {
 		ID3D11RasterizerState *m_Raster;
 		ID3D11BlendState *m_Blend;
 		ID3D11DepthStencilState *m_DepthState;
+
+		std::vector<ID3D11Buffer*> buffers;
 		
 		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, SceneLighting lighting);
 		void handleErrors(ID3D10Blob *errorMessage, char *shaderFilename);
