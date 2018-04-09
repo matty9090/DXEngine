@@ -34,8 +34,7 @@ class Shader {
 		void setBlendState(int blend);
 		void setRasterState(D3D11_CULL_MODE cull, bool wireframe = false);
 		void setDepthState(ID3D11DepthStencilState *depth) { m_DepthState = depth; }
-
-		//void addBuffer();
+		void setFloatValue(int i, float v) { m_Values[i] = v; }
 
 		ID3DBlob *getVertexShaderBuffer() { return m_VertexShaderBuffer; }
 
@@ -47,8 +46,10 @@ class Shader {
 			D3DXMATRIX  view;		// 64 bytes
 			D3DXMATRIX  projection; // 64 bytes
 			D3DXVECTOR3 camPos;		// 12 bytes
-			float pad;				// 4  bytes
+			float values[5];		// 20 bytes
 		};
+
+		float m_Values[5];
 
 		ID3D11Device *m_Device;
 		ID3D11VertexShader *m_VertexShader;

@@ -191,6 +191,9 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	matrixPtr->view			= viewMatrix;
 	matrixPtr->projection	= projectionMatrix;
 	matrixPtr->camPos		= camPos;
+	matrixPtr->values[0]	= m_Values[0];
+
+	//memcpy(matrixPtr->values, m_Values, 5 * sizeof(float));
 
 	deviceContext->Unmap(m_MatrixBuffer, 0);
 
