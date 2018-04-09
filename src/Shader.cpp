@@ -2,7 +2,7 @@
 
 #include <fstream>
 
-Shader::Shader(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, bool should_init) : m_Device(device) {
+Shader::Shader(ID3D11Device *device, ID3D11DeviceContext *context, std::wstring vertexShader, std::wstring pixelShader, bool should_init) : m_Device(device), m_Context(context) {
 	m_VertexShader = NULL;
 	m_PixelShader = NULL;
 	m_Layout = NULL;
@@ -145,6 +145,43 @@ void Shader::setRasterState(D3D11_CULL_MODE cull, bool wireframe) {
 	m_Device->CreateRasterizerState(&rasterDesc, &m_Raster);
 }
 
+void Shader::addBuffer(void *data, size_t size) {
+	D3D11_BUFFER_DESC desc;
+
+	desc.Usage = D3D11_USAGE_DYNAMIC;
+	desc.ByteWidth = size;
+	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	desc.MiscFlags = 0;
+	desc.StructureByteStride = 0;
+
+	Buffer buf;
+	buf.size = size;
+	buf.data = data;
+
+	HRESULT r = m_Device->CreateBuffer(&desc, NULL, &buf.buffer);
+	m_Buffers.push_back(buf);
+
+	updateBuffer(m_Buffers.size() - 1, data);
+}
+
+void Shader::mapBuffer(int i) {
+	D3D11_MAPPED_SUBRESOURCE sub;
+
+	void *bufferPtr;
+	
+	m_Context->Map(m_Buffers[i].buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &sub);
+
+	bufferPtr = (void*)sub.pData;
+	memcpy(bufferPtr, m_Buffers[i].data, m_Buffers[i].size);
+
+	m_Context->Unmap(m_Buffers[i].buffer, 0);
+}
+
+void Shader::updateBuffer(int i, void *data) {
+	m_Buffers[i].data = data;
+}
+
 void Shader::setTexture(std::string tex) {
 	D3DX11CreateShaderResourceViewFromFileA(m_Device, tex.c_str(), NULL, NULL, &m_Texture, NULL);
 }
@@ -197,13 +234,6 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	matrixPtr->projection	= projectionMatrix;
 	matrixPtr->camPos		= camPos;
 	matrixPtr->pad			= 0;
-
-	matrixPtr->value1		= m_Values[0];
-	matrixPtr->value2		= m_Values[1];
-	matrixPtr->value3		= m_Values[2];
-	matrixPtr->value4		= m_Values[3];
-
-	//memcpy(matrixPtr->values, m_Values, sizeof(float) * 4);
 	
 	deviceContext->Unmap(m_MatrixBuffer, 0);
 
@@ -216,6 +246,9 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 
 	deviceContext->Unmap(m_LightBuffer, 0);
 
+	for (int i = 0; i < m_Buffers.size(); ++i)
+		mapBuffer(i);
+
 	if (m_Texture)		deviceContext->PSSetShaderResources(0, 1, &m_Texture);
 	if (m_NormalMap)	deviceContext->PSSetShaderResources(1, 1, &m_NormalMap);
 	if (m_SpecularMap)	deviceContext->PSSetShaderResources(2, 1, &m_SpecularMap);
@@ -224,6 +257,15 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	deviceContext->VSSetConstantBuffers(0, 1, &m_MatrixBuffer);
 	deviceContext->PSSetConstantBuffers(0, 1, &m_MatrixBuffer);
 	deviceContext->PSSetConstantBuffers(1, 1, &m_LightBuffer);
+
+	int startSlot = 1;
+
+	for (int i = 0; i < m_Buffers.size(); ++i) {
+		deviceContext->VSSetConstantBuffers(startSlot    , 1, &m_Buffers[i].buffer);
+		deviceContext->PSSetConstantBuffers(startSlot + 1, 1, &m_Buffers[i].buffer);
+
+		++startSlot;
+	}
 
 	return true;
 }

@@ -1,11 +1,11 @@
 #include "Primitive.hpp"
 
-Primitive::Primitive(ID3D11Device *device, DXShader shader) : m_VertexCount(0), m_IndexCount(0), m_Device(device) {
+Primitive::Primitive(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader) : m_VertexCount(0), m_IndexCount(0), m_Device(device), m_Context(context) {
 	m_VertexBuffer = NULL;
 	m_IndexBuffer = NULL;
 
 	if(!shader.vertex.empty())
-		m_Shader = new Shader(device, shader.vertex, shader.pixel);
+		m_Shader = new Shader(device, context, shader.vertex, shader.pixel);
 
 	initMatrices();
 }

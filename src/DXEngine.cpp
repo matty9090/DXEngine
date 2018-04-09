@@ -32,7 +32,7 @@ void DXEngine::createLight(Light *light) {
 }
 
 Cube *DXEngine::createCube(DXShader shader, D3DXVECTOR3 position) {
-	Cube *cube = new Cube(m_Device, shader);
+	Cube *cube = new Cube(m_Device, m_Context, shader);
 	cube->setPosition(position);
 
 	m_Objects.push_back(cube);
@@ -41,7 +41,7 @@ Cube *DXEngine::createCube(DXShader shader, D3DXVECTOR3 position) {
 }
 
 Model *DXEngine::createModel(DXShader shader, D3DXVECTOR3 position) {
-	Model *model = new Model(m_Device, shader);
+	Model *model = new Model(m_Device, m_Context, shader);
 	model->setPosition(position);
 	model->setDepth(m_Graphics->getDepthStateOn());
 

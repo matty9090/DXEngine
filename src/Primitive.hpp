@@ -9,7 +9,7 @@
 
 class Primitive {
 	public:
-		Primitive(ID3D11Device *device, DXShader shader);
+		Primitive(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader);
 		~Primitive();
 
 		void render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting) const;
@@ -35,6 +35,7 @@ class Primitive {
 	protected:
 		ID3D11Buffer *m_VertexBuffer, *m_IndexBuffer;
 		ID3D11Device *m_Device;
+		ID3D11DeviceContext *m_Context;
 
 		D3DXMATRIX m_WorldMatrix, m_MatrixMov;
 		D3DXMATRIX m_RotX, m_RotY, m_RotZ;
@@ -64,7 +65,7 @@ class Primitive {
 
 class Cube : public Primitive {
 	public:
-		Cube(ID3D11Device *device, DXShader shader) : Primitive(device, shader) {
+		Cube(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader) : Primitive(device, context, shader) {
 			init();
 			initData();
 		}

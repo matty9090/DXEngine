@@ -4,7 +4,7 @@
 
 class Model : public Primitive {
 	public:
-		Model(ID3D11Device *device, DXShader shader);
+		Model(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader);
 		~Model();
 
 		void init() {}
@@ -18,6 +18,8 @@ class Model : public Primitive {
 		void setSpecularMap(std::string tex) { m_Shader->setSpecularMap(tex); }
 		void setParallaxMap(std::string tex) { m_Shader->setParallaxMap(tex); }
 		void setShaderFloatValue(int i, float v) { m_Shader->setFloatValue(i, v); }
+
+		Shader *getShader() { return m_Shader; }
 
 	private:
 		ID3D11InputLayout *m_VertexLayout;

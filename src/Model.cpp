@@ -6,11 +6,11 @@
 
 #include <iostream>
 
-Model::Model(ID3D11Device *device, DXShader shader) : Primitive(device, DXShader()) {
+Model::Model(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader) : Primitive(device, context, DXShader()) {
 	m_VertexShader = shader.vertex;
 	m_PixelShader  = shader.pixel;
 
-	m_Shader = new Shader(device, m_VertexShader, m_PixelShader, false);
+	m_Shader = new Shader(device, context, m_VertexShader, m_PixelShader, false);
 }
 
 void Model::setCullMode(D3D11_CULL_MODE cull) {
