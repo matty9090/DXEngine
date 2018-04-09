@@ -191,9 +191,8 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	matrixPtr->view			= viewMatrix;
 	matrixPtr->projection	= projectionMatrix;
 	matrixPtr->camPos		= camPos;
-	matrixPtr->values[0]	= m_Values[0];
 
-	//memcpy(matrixPtr->values, m_Values, 5 * sizeof(float));
+	memcpy(matrixPtr->values, &m_Values[0], sizeof(float) * 5);
 
 	deviceContext->Unmap(m_MatrixBuffer, 0);
 
@@ -202,7 +201,7 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	lightPtr = (SceneLighting*)mapLight.pData;
 	lightPtr->ambient = lighting.ambient;
 
-	memcpy(mapLight.pData, &lighting.lights[0], sizeof(Light) * 2);
+	memcpy(lightPtr->lights, &lighting.lights[0], sizeof(Light) * 2);
 
 	deviceContext->Unmap(m_LightBuffer, 0);
 

@@ -45,8 +45,8 @@ class Shader {
 			D3DXMATRIX  world;		// 64 bytes
 			D3DXMATRIX  view;		// 64 bytes
 			D3DXMATRIX  projection; // 64 bytes
+			float values[5];		// 20  bytes
 			D3DXVECTOR3 camPos;		// 12 bytes
-			float values[5];		// 20 bytes
 		};
 
 		float m_Values[5];
