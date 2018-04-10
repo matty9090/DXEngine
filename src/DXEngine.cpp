@@ -57,3 +57,77 @@ Camera *DXEngine::createCamera(D3DXVECTOR3 position) {
 
 	return m_Camera;
 }
+
+void DXEngine::RGBToHSL(int R, int G, int B, int& H, int& S, int& L) {
+	float fr = (float)R / 255.0f;
+	float fg = (float)G / 255.0f;
+	float fb = (float)B / 255.0f;
+
+	float min = _min(fr, fg, fb);
+	float max = _max(fr, fg, fb);
+
+	L = 50.f * (max + min);
+
+	if (min == max) {
+		S = H = 0.f;
+		return;
+	}
+
+	if (L < 50.0f)
+		S = 100.f * (max - min) / (max + min);
+	else
+		S = 100.f * (max - min) / (2.f - max - min);
+
+	if (max == fr) H = 60.f * (fg - fb) / (max - min);
+	if (max == fg) H = 60.f * (fb - fr) / (max - min) + 120.f;
+	if (max == fb) H = 60.f * (fr - fg) / (max - min) + 240.f;
+
+	if (H < 0.f) H += 360.f;
+}
+
+void DXEngine::HSLToRGB(float H, float S, float L, int& R, int& G, int& B) {
+	S /= 100.f, L /= 100.f;
+
+	float hh = H / 60.0f;
+	float C = (1.0f - fabs(2.0f * L - 1.0f)) * S;
+	float X = C * (1.0f - fabs(fmodf(hh, 2.0f) - 1.0f));
+	float fR, fG, fB;
+
+	if (hh >= 0 && hh < 1) { fR = C; fG = X; }
+	else if (hh >= 1 && hh < 2) { fR = X; fG = C; }
+	else if (hh >= 2 && hh < 3) { fG = C; fB = X; }
+	else if (hh >= 3 && hh < 4) { fG = X; fB = C; }
+	else if (hh >= 4 && hh < 5) { fR = X; fB = C; }
+	else { R = C; B = X; }
+
+	float m = L - C / 2.0f;
+
+
+	R = (fR + m) * 255.0f;
+	G = (fG + m) * 255.0f;
+	B = (fB + m) * 255.0f;
+}
+
+float DXEngine::_min(float f1, float f2, float f3) {
+	float fMin = f1;
+
+	if (f2 < fMin)
+		fMin = f2;
+
+	if (f3 < fMin)
+		fMin = f3;
+
+	return fMin;
+}
+
+float DXEngine::_max(float f1, float f2, float f3) {
+	float fMax = f1;
+
+	if (f2 > fMax)
+		fMax = f2;
+
+	if (f3 > fMax)
+		fMax = f3;
+
+	return fMax;
+}
