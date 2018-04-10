@@ -238,7 +238,7 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	lightPtr->ambient = lighting.ambient;
 	lightPtr->num = lighting.num;
 
-	memcpy(lightPtr->lights, lighting.lights, sizeof(Light) * lighting.num);
+	memcpy(lightPtr->lights, lighting.lights, sizeof(PointLight) * lighting.num);
 
 	deviceContext->Unmap(m_LightBuffer, 0);
 

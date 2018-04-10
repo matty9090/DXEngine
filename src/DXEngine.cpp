@@ -26,7 +26,7 @@ void DXEngine::render() {
 		obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Camera->getDxPosition(), m_Lighting);
 }
 
-void DXEngine::createLight(Light *light) {
+void DXEngine::createLight(PointLight *light) {
 	m_Lights.push_back(light);
 	m_Lighting.lights[m_Lights.size() - 1] = *light;
 	m_Lighting.num = m_Lights.size();
@@ -66,23 +66,23 @@ void DXEngine::RGBToHSL(int R, int G, int B, int& H, int& S, int& L) {
 	float min = _min(fr, fg, fb);
 	float max = _max(fr, fg, fb);
 
-	L = 50.f * (max + min);
+	L = 50 * (int)(max + min);
 
 	if (min == max) {
-		S = H = 0.f;
+		S = H = 0;
 		return;
 	}
 
-	if (L < 50.0f)
-		S = 100.f * (max - min) / (max + min);
+	if (L < 50)
+		S = 100 * (int)((max - min) / (max + min));
 	else
-		S = 100.f * (max - min) / (2.f - max - min);
+		S = 100 * (int)((max - min) / (2 - max - min));
 
-	if (max == fr) H = 60.f * (fg - fb) / (max - min);
-	if (max == fg) H = 60.f * (fb - fr) / (max - min) + 120.f;
-	if (max == fb) H = 60.f * (fr - fg) / (max - min) + 240.f;
+	if (max == fr) H = 60 * (int)((fg - fb) / (max - min));
+	if (max == fg) H = 60 * (int)((fb - fr) / (max - min)) + 120;
+	if (max == fb) H = 60 * (int)((fr - fg) / (max - min)) + 240;
 
-	if (H < 0.f) H += 360.f;
+	if (H < 0) H += 360;
 }
 
 void DXEngine::HSLToRGB(float H, float S, float L, int& R, int& G, int& B) {
@@ -91,21 +91,20 @@ void DXEngine::HSLToRGB(float H, float S, float L, int& R, int& G, int& B) {
 	float hh = H / 60.0f;
 	float C = (1.0f - fabs(2.0f * L - 1.0f)) * S;
 	float X = C * (1.0f - fabs(fmodf(hh, 2.0f) - 1.0f));
-	float fR, fG, fB;
+	float fR = 0.0f, fG = 0.0f, fB = 0.0f;
 
 	if (hh >= 0 && hh < 1) { fR = C; fG = X; }
 	else if (hh >= 1 && hh < 2) { fR = X; fG = C; }
 	else if (hh >= 2 && hh < 3) { fG = C; fB = X; }
 	else if (hh >= 3 && hh < 4) { fG = X; fB = C; }
 	else if (hh >= 4 && hh < 5) { fR = X; fB = C; }
-	else { R = C; B = X; }
+	else { fR = C; fB = X; }
 
 	float m = L - C / 2.0f;
 
-
-	R = (fR + m) * 255.0f;
-	G = (fG + m) * 255.0f;
-	B = (fB + m) * 255.0f;
+	R = (int)((fR + m) * 255);
+	G = (int)((fG + m) * 255);
+	B = (int)((fB + m) * 255);
 }
 
 float DXEngine::_min(float f1, float f2, float f3) {
