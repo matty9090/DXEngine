@@ -16,11 +16,6 @@ Shader::Shader(ID3D11Device *device, ID3D11DeviceContext *context, std::wstring 
 	m_Blend = NULL;
 	m_Sampler = NULL;
 
-	m_Values[0] = 0;
-	m_Values[1] = 0;
-	m_Values[2] = 0;
-	m_Values[3] = 0;
-
 	D3DReadFileToBlob(vertexShader.c_str(), &m_VertexShaderBuffer);
 	D3DReadFileToBlob(pixelShader.c_str(), &m_PixelShaderBuffer);
 	device->CreateVertexShader(m_VertexShaderBuffer->GetBufferPointer(), m_VertexShaderBuffer->GetBufferSize(), NULL, &m_VertexShader);
@@ -241,12 +236,13 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 
 	lightPtr = (SceneLighting*)mapLight.pData;
 	lightPtr->ambient = lighting.ambient;
+	lightPtr->num = lighting.num;
 
-	memcpy(lightPtr->lights, lighting.lights, sizeof(Light) * 2);
+	memcpy(lightPtr->lights, lighting.lights, sizeof(Light) * lighting.num);
 
 	deviceContext->Unmap(m_LightBuffer, 0);
 
-	for (int i = 0; i < m_Buffers.size(); ++i)
+	for (size_t i = 0; i < m_Buffers.size(); ++i)
 		mapBuffer(i);
 
 	if (m_Texture)		deviceContext->PSSetShaderResources(0, 1, &m_Texture);
@@ -260,7 +256,7 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 
 	int startSlot = 1;
 
-	for (int i = 0; i < m_Buffers.size(); ++i) {
+	for (size_t i = 0; i < m_Buffers.size(); ++i) {
 		deviceContext->VSSetConstantBuffers(startSlot    , 1, &m_Buffers[i].buffer);
 		deviceContext->PSSetConstantBuffers(startSlot + 1, 1, &m_Buffers[i].buffer);
 

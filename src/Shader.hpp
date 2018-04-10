@@ -34,7 +34,6 @@ class Shader {
 		void setBlendState(int blend);
 		void setRasterState(D3D11_CULL_MODE cull, bool wireframe = false);
 		void setDepthState(ID3D11DepthStencilState *depth) { m_DepthState = depth; }
-		void setFloatValue(int i, float v) { m_Values[i] = v; }
 		void addBuffer(void *data, size_t size);
 		void mapBuffer(int i);
 		void updateBuffer(int i, void *data);
@@ -51,8 +50,6 @@ class Shader {
 			D3DXVECTOR3 camPos;		// 12 bytes
 			float pad;				// 4 bytes
 		};
-
-		float m_Values[4];
 
 		ID3D11Device *m_Device;
 		ID3D11DeviceContext *m_Context;

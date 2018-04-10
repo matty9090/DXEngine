@@ -17,7 +17,6 @@ class Model : public Primitive {
 		void setNormalMap(std::string tex) { m_Shader->setNormalMap(tex); }
 		void setSpecularMap(std::string tex) { m_Shader->setSpecularMap(tex); }
 		void setParallaxMap(std::string tex) { m_Shader->setParallaxMap(tex); }
-		void setShaderFloatValue(int i, float v) { m_Shader->setFloatValue(i, v); }
 
 		Shader *getShader() { return m_Shader; }
 

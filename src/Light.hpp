@@ -12,7 +12,7 @@ struct Light {
 };
 
 struct SceneLighting {
-	Light lights[2];	// 32 bytes
+	Light lights[8];	// 128 bytes
 	Colour ambient;		// 12 bytes
-	float pad;			// 4  bytes
+	size_t num;			// 4 bytes
 };

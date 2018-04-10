@@ -29,6 +29,7 @@ void DXEngine::render() {
 void DXEngine::createLight(Light *light) {
 	m_Lights.push_back(light);
 	m_Lighting.lights[m_Lights.size() - 1] = *light;
+	m_Lighting.num = m_Lights.size();
 }
 
 Cube *DXEngine::createCube(DXShader shader, D3DXVECTOR3 position) {
