@@ -35,6 +35,8 @@ bool Graphics::init() {
 
 void Graphics::beginScene() {
 	float colour[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+	m_DeviceContext->RSSetViewports(1, &m_Viewport);
+	m_DeviceContext->OMSetRenderTargets(1, &m_RenderTargetView, m_DepthStencilView);
 	m_DeviceContext->ClearRenderTargetView(m_RenderTargetView, colour);
 	m_DeviceContext->ClearDepthStencilView(m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
@@ -46,6 +48,72 @@ void Graphics::endScene() {
 void Graphics::toggleWireframe() {
 	m_Wireframe = !m_Wireframe;
 	initRaster(m_Wireframe);
+}
+
+void Graphics::createMirror(Mirror &mirror) {
+	D3D11_TEXTURE2D_DESC texDesc;
+	texDesc.Width  = mirror.res.x;
+	texDesc.Height = mirror.res.y;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+
+	m_Device->CreateTexture2D(&texDesc, NULL, &mirror.tex);
+	m_Device->CreateRenderTargetView(mirror.tex, NULL, &mirror.target);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC srv;
+	srv.Format = texDesc.Format;
+	srv.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srv.Texture2D.MostDetailedMip = 0;
+	srv.Texture2D.MipLevels = 1;
+
+	m_Device->CreateShaderResourceView(mirror.tex, &srv, &mirror.map);
+
+	texDesc.Width = mirror.res.x;
+	texDesc.Height = mirror.res.y;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_D32_FLOAT;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.SampleDesc.Quality = 0;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+
+	m_Device->CreateTexture2D(&texDesc, NULL, &mirror.stencil);
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC depthStencil;
+	depthStencil.Format = texDesc.Format;
+	depthStencil.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	depthStencil.Texture2D.MipSlice = 0;
+
+	m_Device->CreateDepthStencilView(mirror.stencil, &depthStencil, &mirror.depthStencil);
+
+	D3D11_VIEWPORT vp;
+	vp.Width = (float)mirror.res.x;
+	vp.Height = (float)mirror.res.y;
+	vp.MinDepth = 0.0f;
+	vp.MaxDepth = 1.0f;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+
+	mirror.viewport = vp;
+}
+
+void Graphics::setRenderTargets(ID3D11RenderTargetView *target, ID3D11DepthStencilView *depth, D3D11_VIEWPORT &viewport) {
+	float colour[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	m_DeviceContext->RSSetViewports(1, &viewport);
+	m_DeviceContext->OMSetRenderTargets(1, &target, depth);
+	m_DeviceContext->ClearRenderTargetView(target, colour);
+	m_DeviceContext->ClearDepthStencilView(depth, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
 void Graphics::drawText(float x, float y, UINT32 colour, std::string str) {
@@ -252,16 +320,14 @@ bool Graphics::initRaster(bool wireframe) {
 }
 
 bool Graphics::initViewport() {
-	D3D11_VIEWPORT viewport;
-
-	viewport.Width = (float)m_WindowW;
-	viewport.Height = (float)m_WindowH;
-	viewport.MinDepth = 0.0f;
-	viewport.MaxDepth = 1.0f;
-	viewport.TopLeftX = 0.0f;
-	viewport.TopLeftY = 0.0f;
+	m_Viewport.Width = (float)m_WindowW;
+	m_Viewport.Height = (float)m_WindowH;
+	m_Viewport.MinDepth = 0.0f;
+	m_Viewport.MaxDepth = 1.0f;
+	m_Viewport.TopLeftX = 0.0f;
+	m_Viewport.TopLeftY = 0.0f;
 	
-	m_DeviceContext->RSSetViewports(1, &viewport);
+	m_DeviceContext->RSSetViewports(1, &m_Viewport);
 
 	return true;
 }

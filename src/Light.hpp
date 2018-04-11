@@ -24,7 +24,7 @@ struct SpotLight {
 
 struct SceneLighting {
 	PointLight  lights[8];	// 256 bytes
-	SpotLight  slights[2];	// 128  bytes
+	SpotLight  slights[2];	// 128 bytes
 	Colour ambient;			// 12  bytes
 	size_t num;				// 4   bytes
 	size_t nums;			// 4   bytes

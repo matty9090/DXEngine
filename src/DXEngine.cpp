@@ -5,10 +5,9 @@ DXEngine::DXEngine(Graphics *graphics) : m_Device(graphics->getDevice()), m_Cont
 }
 
 DXEngine::~DXEngine() {
-	for (auto &obj   : m_Objects) delete obj;
-	for (auto &light : m_Lights)  delete light;
-
-	delete m_Camera;
+	for (auto &obj    : m_Objects)  delete obj;
+	for (auto &light  : m_Lights)   delete light;
+	for (auto &camera : m_Cameras)  delete camera;
 
 	m_Objects.clear();
 	m_Lights.clear();
@@ -22,11 +21,26 @@ void DXEngine::render() {
 		m_Lighting.slights[i] = *m_sLights[i];
 
 	D3DXMATRIX viewMatrix;
+
 	m_Camera->render();
 	m_Camera->getViewMatrix(viewMatrix);
 
 	for (auto &obj : m_Objects)
 		obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Camera->getDxPosition(), m_Lighting);
+}
+
+void DXEngine::renderMirrors() {
+	D3DXMATRIX viewMatrix;
+
+	for (size_t i = 0; i < m_Mirrors.size(); ++i) {
+		m_Graphics->setRenderTargets(m_Mirrors[i].target, m_Mirrors[i].depthStencil, m_Mirrors[i].viewport);
+		
+		m_Mirrors[i].cam->render();
+		m_Mirrors[i].cam->getViewMatrix(viewMatrix);
+
+		for (auto &obj : m_Objects)
+			obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Mirrors[i].cam->getDxPosition(), m_Lighting);
+	}
 }
 
 void DXEngine::createLight(PointLight *light) {
@@ -39,6 +53,20 @@ void DXEngine::createLight(SpotLight *light) {
 	m_sLights.push_back(light);
 	m_Lighting.slights[m_sLights.size() - 1] = *light;
 	m_Lighting.nums = m_sLights.size();
+}
+
+void DXEngine::createMirror(D3DXVECTOR2 size, Vec2<size_t> res, Camera *cam, Model *model) {
+	Mirror mirror;
+
+	mirror.cam = cam;
+	mirror.res = res;
+	mirror.size = size;
+	mirror.model = model;
+
+	m_Graphics->createMirror(mirror);
+	model->getShader()->setRenderTexture(mirror.map);
+
+	m_Mirrors.push_back(mirror);
 }
 
 Cube *DXEngine::createCube(DXShader shader, D3DXVECTOR3 position) {
@@ -61,10 +89,12 @@ Model *DXEngine::createModel(DXShader shader, D3DXVECTOR3 position) {
 }
 
 Camera *DXEngine::createCamera(D3DXVECTOR3 position) {
-	m_Camera = new Camera();
-	m_Camera->setPosition(position);
+	Camera *cam = new Camera();
+	cam->setPosition(position);
 
-	return m_Camera;
+	m_Cameras.push_back(cam);
+
+	return cam;
 }
 
 void DXEngine::RGBToHSL(int R, int G, int B, int& H, int& S, int& L) {

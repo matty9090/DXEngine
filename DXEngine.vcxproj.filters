@@ -39,53 +39,53 @@
     <ClCompile Include="src\Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Common\CFatalException.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Common\MSDefines.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Common\Utility.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\BaseMath.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CMatrix2x2.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CMatrix3x3.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CMatrix4x4.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CQuaternion.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CQuatTransform.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CVector2.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CVector3.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CVector4.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\MathIO.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\CImportXFile.cpp">
-      <Filter>Source Files\Import</Filter>
-    </ClCompile>
     <ClCompile Include="src\Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\DXEngine.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Common\CFatalException.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\CImportXFile.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\CMatrix2x2.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\CMatrix3x3.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\CMatrix4x4.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\CQuaternion.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\CQuatTransform.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\CVector2.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\CVector3.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\CVector4.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\BaseMath.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Math\MathIO.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Common\MSDefines.cpp">
+      <Filter>Source Files\Import</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Import\Common\Utility.cpp">
+      <Filter>Source Files\Import</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -116,73 +116,76 @@
     <ClInclude Include="src\DXEngine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\CImportXFile.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Colour.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\MeshData.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\rmxfguid.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\rmxftmpl.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\BaseMath.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CMatrix2x2.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CMatrix3x3.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CMatrix4x4.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CQuaternion.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CQuatTransform.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CVector2.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CVector3.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\CVector4.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\MathDX.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Math\MathIO.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Common\CFatalException.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Common\Error.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Common\GenDefines.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Common\MSDefines.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UCLan\Graphics\Sem2 Demos\Graphics\PixelLighting2\Import\Common\Utility.h">
-      <Filter>Header Files\Import</Filter>
-    </ClInclude>
     <ClInclude Include="src\Model.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Light.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\BaseMath.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Common\CFatalException.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\CImportXFile.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\CMatrix2x2.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\CMatrix3x3.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\CMatrix4x4.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\CQuaternion.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\CQuatTransform.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\CVector2.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\CVector3.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\CVector4.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Common\Error.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Colour.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\MathDX.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Math\MathIO.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Common\Utility.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\rmxftmpl.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\rmxfguid.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Common\MSDefines.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\MeshData.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Import\Common\GenDefines.h">
+      <Filter>Header Files\Import</Filter>
+    </ClInclude>
+    <ClInclude Include="Mirror.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

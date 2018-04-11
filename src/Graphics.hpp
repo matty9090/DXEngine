@@ -7,7 +7,10 @@
 #include <d3dx10math.h>
 #include <D3d9types.h>
 
+#include <vector>
+
 #include "FW1FontWrapper.h"
+#include "Mirror.hpp"
 
 class Window;
 
@@ -22,9 +25,11 @@ class Graphics {
 		void endScene();
 
 		void toggleWireframe();
+		void createMirror(Mirror &mirror);
+		void setRenderTargets(ID3D11RenderTargetView *target, ID3D11DepthStencilView *depth, D3D11_VIEWPORT &viewport);
 
-		void GetProjMatrix(D3DXMATRIX &m) { m = m_ProjectionMatrix; }
-		void GetOrthoMatrix(D3DXMATRIX &m) { m = m_OrthoMatrix; }
+		void getProjMatrix(D3DXMATRIX &m) { m = m_ProjectionMatrix; }
+		void getOrthoMatrix(D3DXMATRIX &m) { m = m_OrthoMatrix; }
 
 		void drawText(float x, float y, UINT32 colour, std::string str);
 		void drawTextValue(float x, float y, std::string desc, float value);
@@ -49,6 +54,7 @@ class Graphics {
 		char m_videoCardDescription[128];
 		float m_Near, m_Far;
 
+		D3D11_VIEWPORT m_Viewport;
 		IFW1FontWrapper *m_FontWrapper;
 		IDXGISwapChain *m_SwapChain;
 		ID3D11Device *m_Device;

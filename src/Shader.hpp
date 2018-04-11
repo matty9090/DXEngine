@@ -34,6 +34,8 @@ class Shader {
 		void setBlendState(int blend);
 		void setRasterState(D3D11_CULL_MODE cull, bool wireframe = false);
 		void setDepthState(ID3D11DepthStencilState *depth) { m_DepthState = depth; }
+		void setRenderTexture(ID3D11ShaderResourceView *tex) { m_Texture = tex; }
+
 		void addBuffer(void *data, size_t size);
 		void mapBuffer(int i);
 		void updateBuffer(int i, void *data);
