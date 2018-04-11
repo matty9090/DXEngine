@@ -23,6 +23,7 @@ class DXEngine {
 		void setAmbientColour(Colour col) { m_Lighting.ambient = col; }
 
 		void    createLight(PointLight *light);
+		void    createLight(SpotLight  *light);
 		Cube   *createCube(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		Model  *createModel(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		Camera *createCamera(D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -39,6 +40,7 @@ class DXEngine {
 		SceneLighting m_Lighting;
 
 		std::vector<PointLight*> m_Lights;
+		std::vector<SpotLight*> m_sLights;
 		std::vector<Primitive*> m_Objects;
 
 		float _min(float f1, float f2, float f3);

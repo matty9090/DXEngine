@@ -18,6 +18,9 @@ void DXEngine::render() {
 	for (size_t i = 0; i < m_Lights.size(); ++i)
 		m_Lighting.lights[i] = *m_Lights[i];
 
+	for (size_t i = 0; i < m_sLights.size(); ++i)
+		m_Lighting.slights[i] = *m_sLights[i];
+
 	D3DXMATRIX viewMatrix;
 	m_Camera->render();
 	m_Camera->getViewMatrix(viewMatrix);
@@ -30,6 +33,12 @@ void DXEngine::createLight(PointLight *light) {
 	m_Lights.push_back(light);
 	m_Lighting.lights[m_Lights.size() - 1] = *light;
 	m_Lighting.num = m_Lights.size();
+}
+
+void DXEngine::createLight(SpotLight *light) {
+	m_sLights.push_back(light);
+	m_Lighting.slights[m_sLights.size() - 1] = *light;
+	m_Lighting.nums = m_sLights.size();
 }
 
 Cube *DXEngine::createCube(DXShader shader, D3DXVECTOR3 position) {

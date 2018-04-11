@@ -17,6 +17,7 @@ class Camera {
 
 		Vec3<float> getPosition();
 		D3DXVECTOR3 getDxPosition();
+		D3DXVECTOR3 getDirection();
 
 		void render();
 		void getViewMatrix(D3DXMATRIX &m) { m = m_ViewMatrix; }

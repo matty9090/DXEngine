@@ -33,6 +33,10 @@ D3DXVECTOR3 Camera::getDxPosition() {
 	return m_Pos;
 }
 
+D3DXVECTOR3 Camera::getDirection() {
+	return m_Forward;
+}
+
 void Camera::render() {
 	D3DXMatrixRotationX(&m_RotX, -m_Pitch);
 	D3DXMatrixRotationY(&m_RotY, -m_Yaw);
