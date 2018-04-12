@@ -43,14 +43,18 @@ void DXEngine::renderMirrors() {
 	}
 }
 
-void DXEngine::raycast(float mx, float my, RayHit & rayHit) {
+void DXEngine::raycast(float mx, float my, RayHit &rayHit) {
 	D3D11_VIEWPORT viewport = m_Graphics->getViewport();
 	D3D10_VIEWPORT vp;
 
-	memcpy(&vp, &viewport, sizeof(D3D10_VIEWPORT));
+	vp.Height	= viewport.Height;
+	vp.Width	= viewport.Width;
+	vp.MaxDepth = viewport.MaxDepth;
+	vp.MinDepth = viewport.MinDepth;
+	vp.TopLeftX = viewport.TopLeftX;
+	vp.TopLeftY = viewport.TopLeftY;
 
-	D3DXVECTOR3 result, screen = D3DXVECTOR3(mx, my, 0.0f);
-	
+	D3DXVECTOR3 result, screen = D3DXVECTOR3(mx, my, 0.0f), dir;
 	D3DXMATRIX world, view, proj;
 
 	D3DXMatrixIdentity(&world);
@@ -58,6 +62,15 @@ void DXEngine::raycast(float mx, float my, RayHit & rayHit) {
 	proj = m_Graphics->getProjectionMatrix();
 
 	D3DXVec3Unproject(&result, &screen, &vp, &proj, &view, &world);
+
+	dir = result - m_Camera->getDxPosition();
+	D3DXVec3Normalize(&dir, &dir);
+
+	Ray ray;
+	ray.dir = dir;
+	ray.pos = m_Camera->getDxPosition();
+
+	rayHit.ray = ray;
 }
 
 void DXEngine::createLight(PointLight *light) {

@@ -11,4 +11,5 @@ struct Ray {
 
 struct RayHit {
 	Model *model;
+	Ray ray;
 };
