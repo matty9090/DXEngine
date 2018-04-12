@@ -93,8 +93,9 @@ void Graphics::createMirror(Mirror &mirror) {
 	depthStencil.Format = texDesc.Format;
 	depthStencil.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	depthStencil.Texture2D.MipSlice = 0;
+	depthStencil.Flags = 0;
 
-	m_Device->CreateDepthStencilView(mirror.stencil, &depthStencil, &mirror.depthStencil);
+	HRESULT res = m_Device->CreateDepthStencilView(mirror.stencil, &depthStencil, &mirror.depthStencil);
 
 	D3D11_VIEWPORT vp;
 	vp.Width = (float)mirror.res.x;
@@ -209,7 +210,7 @@ bool Graphics::initDevice() {
 
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 
-	if (FAILED(D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, 0, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_SwapChain, &m_Device, NULL, &m_DeviceContext)))
+	if (FAILED(D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE, NULL, D3D11_CREATE_DEVICE_DEBUG, &featureLevel, 1, D3D11_SDK_VERSION, &swapChainDesc, &m_SwapChain, &m_Device, NULL, &m_DeviceContext)))
 		return false;
 
 	return true;
@@ -250,7 +251,6 @@ bool Graphics::initDepthBuffer() {
 	depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	depthBufferDesc.CPUAccessFlags = 0;
 	depthBufferDesc.MiscFlags = 0;
-
 
 	if (FAILED(m_Device->CreateTexture2D(&depthBufferDesc, NULL, &m_DepthStencilBuffer)))
 		return false;

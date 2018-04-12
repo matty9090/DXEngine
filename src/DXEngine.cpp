@@ -47,12 +47,12 @@ void DXEngine::raycast(float mx, float my, RayHit &rayHit) {
 	D3D11_VIEWPORT viewport = m_Graphics->getViewport();
 	D3D10_VIEWPORT vp;
 
-	vp.Height	= viewport.Height;
-	vp.Width	= viewport.Width;
+	vp.Height	= (UINT)viewport.Height;
+	vp.Width	= (UINT)viewport.Width;
 	vp.MaxDepth = viewport.MaxDepth;
 	vp.MinDepth = viewport.MinDepth;
-	vp.TopLeftX = viewport.TopLeftX;
-	vp.TopLeftY = viewport.TopLeftY;
+	vp.TopLeftX = (UINT)viewport.TopLeftX;
+	vp.TopLeftY = (UINT)viewport.TopLeftY;
 
 	D3DXVECTOR3 result, screen = D3DXVECTOR3(mx, my, 0.0f), dir;
 	D3DXMATRIX world, view, proj;
@@ -66,11 +66,15 @@ void DXEngine::raycast(float mx, float my, RayHit &rayHit) {
 	dir = result - m_Camera->getDxPosition();
 	D3DXVec3Normalize(&dir, &dir);
 
-	Ray ray;
-	ray.dir = dir;
-	ray.pos = m_Camera->getDxPosition();
+	rayHit.ray = Ray(m_Camera->getDxPosition(), dir);
+	rayHit.model = NULL;
 
-	rayHit.ray = ray;
+	for (auto &obj : m_Objects) {
+		if (!obj->ignoreRaycast() && obj->getAABB().intersects(rayHit.ray, 0.0f, 100.0f)) {
+			rayHit.model = obj;
+			break;
+		}
+	}
 }
 
 void DXEngine::createLight(PointLight *light) {

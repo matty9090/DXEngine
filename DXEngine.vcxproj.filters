@@ -87,6 +87,9 @@
     <ClCompile Include="src\Import\Common\Utility.cpp">
       <Filter>Source Files\Import</Filter>
     </ClCompile>
+    <ClCompile Include="src\AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.hpp">
@@ -189,6 +192,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Ray.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AABB.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
