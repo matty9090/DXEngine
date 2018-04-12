@@ -79,6 +79,6 @@ template <class T = float> struct Vec3 {
 	}
 
 	std::string toString() {
-		return "( " + to_string(x) + ", " + to_string(y) + ", " + to_string(z) + ")";
+		return "( " + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
 	}
 };

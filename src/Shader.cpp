@@ -38,8 +38,9 @@ bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring 
 		};
 
 		unsigned int numElements = sizeof(vertexLayout) / sizeof(vertexLayout[0]);
+		HRESULT res = device->CreateInputLayout(vertexLayout, numElements, m_VertexShaderBuffer->GetBufferPointer(), m_VertexShaderBuffer->GetBufferSize(), &m_Layout);
 
-		if (FAILED(device->CreateInputLayout(vertexLayout, numElements, m_VertexShaderBuffer->GetBufferPointer(), m_VertexShaderBuffer->GetBufferSize(), &m_Layout)))
+		if (FAILED(res))
 			return false;
 	} else
 		m_Layout = layout;

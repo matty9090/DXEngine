@@ -1,6 +1,8 @@
 #include "Primitive.hpp"
 
-Primitive::Primitive(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader) : m_VertexCount(0), m_IndexCount(0), m_Device(device), m_Context(context) {
+Primitive::Primitive(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader)
+	: m_VertexCount(0), m_IndexCount(0), m_Device(device), m_Context(context), m_AABB(m_Pos), m_IgnoreRaycast(false)
+{
 	m_VertexBuffer = NULL;
 	m_IndexBuffer = NULL;
 
@@ -19,7 +21,7 @@ void Primitive::initMatrices() {
 	D3DXMatrixTranslation(&m_MatrixMov, 0, 0, 0);
 	D3DXMatrixScaling(&m_ScaleMatrix, 1.0f, 1.0f, 1.0f);
 
-	rotate(Vec3<float>(0.0f, 0.0f, 0.0f));
+	rotate(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 }
 
 void Primitive::render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR4 &clip, SceneLighting lighting) const {
@@ -38,13 +40,13 @@ void Primitive::cleanup() {
 }
 
 void Primitive::setPosition(Vec3<float> &pos) {
-	m_Pos = pos;
+	m_Pos = D3DXVECTOR3(pos.x, pos.y, pos.z);
 	D3DXMatrixTranslation(&m_MatrixMov, m_Pos.x, m_Pos.y, m_Pos.z);
 	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
 }
 
 void Primitive::setPosition(D3DXVECTOR3 &pos) {
-	m_Pos = Vec3<float>(pos.x, pos.y, pos.z);
+	m_Pos = pos;
 	D3DXMatrixTranslation(&m_MatrixMov, m_Pos.x, m_Pos.y, m_Pos.z);
 	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
 }
@@ -60,14 +62,16 @@ void Primitive::setColour(Vec3<float> &colour) {
 void Primitive::setScale(float scale) {
 	D3DXMatrixScaling(&m_ScaleMatrix, scale, scale, scale);
 	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
+	m_AABB.setBounds(D3DXVECTOR3(-10.0f, -10.0f, -10.0f) * scale * 0.5f, D3DXVECTOR3(10.0f, 10.0f, 10.0f) * scale * 0.5f);
 }
 
 void Primitive::setScale(Vec3<float>& scale) {
 	D3DXMatrixScaling(&m_ScaleMatrix, scale.x, scale.y, scale.z);
 	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
+	m_AABB.setBounds(D3DXVECTOR3(-scale.x, -scale.y, -scale.z) * 5.0f, D3DXVECTOR3(scale.x, scale.y, scale.z) * 5.0f);
 }
 
-void Primitive::move(Vec3<float> &p) {
+void Primitive::move(D3DXVECTOR3 &p) {
 	m_Pos += p;
 
 	D3DXMatrixTranslation(&m_MatrixMov, m_Pos.x, m_Pos.y, m_Pos.z);
@@ -75,7 +79,7 @@ void Primitive::move(Vec3<float> &p) {
 	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
 }
 
-void Primitive::rotate(Vec3<float> &r) {
+void Primitive::rotate(D3DXVECTOR3 &r) {
 	m_Rot += r;
 
 	D3DXMatrixRotationX(&m_RotX, m_Rot.x);

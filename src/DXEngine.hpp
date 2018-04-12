@@ -10,6 +10,7 @@
 #include "Model.hpp"
 #include "Light.hpp"
 #include "Mirror.hpp"
+#include "Ray.hpp"
 
 #include <D3D10.h>
 #include <D3DX10.h>
@@ -22,6 +23,8 @@ class DXEngine {
 
 		void render();
 		void renderMirrors();
+		void raycast(float mx, float my, RayHit &rayHit);
+		
 		void setAmbientColour(Colour col) { m_Lighting.ambient = col; }
 		void setActiveCamera(Camera *cam) { m_Camera = cam; }
 
@@ -31,7 +34,6 @@ class DXEngine {
 		Cube   *createCube(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		Model  *createModel(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		Camera *createCamera(D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-
 
 		void RGBToHSL(int R, int G, int B, int& H, int& S, int& L);
 		void HSLToRGB(float H, float S, float L, int& R, int& G, int& B);

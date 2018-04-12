@@ -87,6 +87,9 @@
     <ClCompile Include="src\Import\Common\Utility.cpp">
       <Filter>Source Files\Import</Filter>
     </ClCompile>
+    <ClCompile Include="src\AABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.hpp">
@@ -185,7 +188,13 @@
     <ClInclude Include="src\Import\Common\GenDefines.h">
       <Filter>Header Files\Import</Filter>
     </ClInclude>
-    <ClInclude Include="Mirror.hpp">
+    <ClInclude Include="src\Mirror.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ray.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AABB.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

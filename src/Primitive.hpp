@@ -6,6 +6,7 @@
 
 #include "Vec3.hpp"
 #include "Shader.hpp"
+#include "AABB.hpp"
 
 class Primitive {
 	public:
@@ -14,23 +15,26 @@ class Primitive {
 
 		void render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR4 &clip, SceneLighting lighting) const;
 		void cleanup();
+		bool ignoreRaycast() { return m_IgnoreRaycast; }
 
-		void move(Vec3<float> &p);
-		void rotate(Vec3<float> &r);
+		void move(D3DXVECTOR3 &p);
+		void rotate(D3DXVECTOR3 &r);
 		void setPosition(Vec3<float> &pos);
 		void setPosition(D3DXVECTOR3 &pos);
 		void setColour(Vec3<float> &colour);
 		void setScale(float scale);
 		void setScale(Vec3<float> &scale);
+		void setIgnoreRaycast(bool ignore) { m_IgnoreRaycast = ignore; }
 
 		int getIndexCount() { return m_IndexCount; }
 		int getVertexCount() { return m_VertexCount; }
 
-		D3DXVECTOR3 getPosition() { return D3DXVECTOR3(m_Pos.x, m_Pos.y, m_Pos.z); }
 
-		D3DMATRIX getWorldMatrix() { return m_WorldMatrix; }
-		Shader *getShader() { return m_Shader; }
-		ID3D11Device *getDevice() { return m_Device; }
+		D3DXVECTOR3   getPosition()		{ return m_Pos; }
+		D3DMATRIX     getWorldMatrix()	{ return m_WorldMatrix; }
+		Shader       *getShader()		{ return m_Shader; }
+		ID3D11Device *getDevice()		{ return m_Device; }
+		AABB         &getAABB()			{ return m_AABB; }
 
 	protected:
 		ID3D11Buffer *m_VertexBuffer, *m_IndexBuffer;
@@ -43,8 +47,10 @@ class Primitive {
 
 		D3D_PRIMITIVE_TOPOLOGY m_Topology;
 
-		Vec3<float> m_Pos, m_Rot;
+		D3DXVECTOR3 m_Pos, m_Rot;
 		Shader *m_Shader;
+		AABB m_AABB;
+		bool m_IgnoreRaycast;
 
 		unsigned int m_VertexSize;
 		int m_VertexCount, m_IndexCount;

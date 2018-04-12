@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\Import\CImportXFile.cpp" />
     <ClCompile Include="src\Import\Common\CFatalException.cpp" />
     <ClCompile Include="src\Import\Common\MSDefines.cpp" />
@@ -162,6 +163,7 @@
     <ClCompile Include="src\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\AABB.hpp" />
     <ClInclude Include="src\Mirror.hpp" />
     <ClInclude Include="src\Import\CImportXFile.h" />
     <ClInclude Include="src\Import\Colour.h" />
@@ -191,6 +193,7 @@
     <ClInclude Include="src\Light.hpp" />
     <ClInclude Include="src\Model.hpp" />
     <ClInclude Include="src\Primitive.hpp" />
+    <ClInclude Include="src\Ray.hpp" />
     <ClInclude Include="src\resource.h" />
     <ClInclude Include="src\Shader.hpp" />
     <ClInclude Include="src\Timer.h" />
