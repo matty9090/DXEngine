@@ -10,7 +10,8 @@ struct Mirror {
 	Model *model;
 	Camera *cam;
 	
-	D3DXVECTOR2 size;
+	bool reflect;
+
 	Vec2<size_t> res;
 	D3D11_VIEWPORT viewport;
 

@@ -26,20 +26,29 @@ void DXEngine::render() {
 	m_Camera->getViewMatrix(viewMatrix);
 
 	for (auto &obj : m_Objects)
-		obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Camera->getDxPosition(), m_Lighting);
+		obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Camera->getDxPosition(), D3DXVECTOR4(0, 0, 0, 0), m_Lighting);
 }
 
 void DXEngine::renderMirrors() {
 	D3DXMATRIX viewMatrix;
+	D3DXVECTOR3 camPos;
+	D3DXPLANE plane;
 
 	for (size_t i = 0; i < m_Mirrors.size(); ++i) {
 		m_Graphics->setRenderTargets(m_Mirrors[i].target, m_Mirrors[i].depthStencil, m_Mirrors[i].viewport);
 		
 		m_Mirrors[i].cam->render();
-		m_Mirrors[i].cam->getViewMatrix(viewMatrix);
+
+		if (m_Mirrors[i].reflect) {
+			renderMirrorMatrix(m_Mirrors[i], viewMatrix, camPos, plane);
+		} else {
+			m_Mirrors[i].cam->getViewMatrix(viewMatrix);
+			camPos = m_Mirrors[i].cam->getDxPosition();
+			plane = D3DXPLANE(0, 0, 0, 0);
+		}
 
 		for (auto &obj : m_Objects)
-			obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), m_Mirrors[i].cam->getDxPosition(), m_Lighting);
+			obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), camPos, (D3DXVECTOR4)plane, m_Lighting);
 	}
 }
 
@@ -55,13 +64,13 @@ void DXEngine::createLight(SpotLight *light) {
 	m_Lighting.nums = m_sLights.size();
 }
 
-void DXEngine::createMirror(D3DXVECTOR2 size, Vec2<size_t> res, Camera *cam, Model *model) {
+void DXEngine::createMirror(Vec2<size_t> res, Camera *cam, Model *model, bool reflect) {
 	Mirror mirror;
 
-	mirror.cam = cam;
-	mirror.res = res;
-	mirror.size = size;
-	mirror.model = model;
+	mirror.cam		= cam;
+	mirror.res		= res;
+	mirror.model	= model;
+	mirror.reflect	= reflect;
 
 	m_Graphics->createMirror(mirror);
 	model->getShader()->setRenderTexture(mirror.map);
@@ -168,4 +177,25 @@ float DXEngine::_max(float f1, float f2, float f3) {
 		fMax = f3;
 
 	return fMax;
+}
+
+void DXEngine::renderMirrorMatrix(Mirror &mirror, D3DXMATRIX &matrix, D3DXVECTOR3 &camPos, D3DXPLANE &plane) {
+	D3DXMATRIXA16 mirrorMatrix = mirror.model->getWorldMatrix();
+
+	D3DXVECTOR3 mirrorPoint  = D3DXVECTOR3(mirrorMatrix(3, 0), mirrorMatrix(3, 1), mirrorMatrix(3, 2));
+	D3DXVECTOR3 mirrorNormal = D3DXVECTOR3(mirrorMatrix(2, 0), mirrorMatrix(2, 1), mirrorMatrix(2, 2));
+
+	D3DXPlaneFromPointNormal(&plane, &mirrorPoint, &mirrorNormal);
+
+	D3DXMATRIX viewMatrix;
+	mirror.cam->getViewMatrix(viewMatrix);
+
+	D3DXMATRIXA16 reflectMatrix;
+	D3DXMatrixReflect(&reflectMatrix, &plane);
+	matrix = reflectMatrix * viewMatrix;
+
+	D3DXVECTOR3 cameraPos = mirror.cam->getDxPosition();
+	D3DXVECTOR4 reflectCameraPos4;
+	D3DXVec3Transform(&reflectCameraPos4, &cameraPos, &reflectMatrix);
+	camPos = D3DXVECTOR3((float*)reflectCameraPos4);
 }

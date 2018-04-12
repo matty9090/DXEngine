@@ -23,7 +23,7 @@ class Shader {
 		~Shader();
 		
 		bool init(ID3D11Device *device, std::wstring vertexShader, std::wstring pixelShader, ID3D11InputLayout *layout = NULL);
-		bool render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting);
+		bool render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR4 &clip, SceneLighting lighting);
 		void cleanup();
 
 		void setTexture(std::string tex);
@@ -51,6 +51,7 @@ class Shader {
 			D3DXMATRIX  projection; // 64 bytes
 			D3DXVECTOR3 camPos;		// 12 bytes
 			float pad;				// 4 bytes
+			D3DXVECTOR4 clipPlane;  // 16 bytes
 		};
 
 		ID3D11Device *m_Device;
@@ -74,6 +75,6 @@ class Shader {
 
 		std::vector<Buffer> m_Buffers;
 		
-		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, SceneLighting lighting);
+		bool setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR4 &clip, SceneLighting lighting);
 		void handleErrors(ID3D10Blob *errorMessage, char *shaderFilename);
 };

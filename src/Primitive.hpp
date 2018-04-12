@@ -12,7 +12,7 @@ class Primitive {
 		Primitive(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader);
 		~Primitive();
 
-		void render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting) const;
+		void render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR4 &clip, SceneLighting lighting) const;
 		void cleanup();
 
 		void move(Vec3<float> &p);

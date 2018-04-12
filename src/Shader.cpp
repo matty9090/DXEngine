@@ -193,8 +193,8 @@ void Shader::setParallaxMap(std::string tex) {
 	D3DX11CreateShaderResourceViewFromFileA(m_Device, tex.c_str(), NULL, NULL, &m_ParallaxMap, NULL);
 }
 
-bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, SceneLighting lighting) {
-	if (!setParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, camPos, lighting))
+bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATRIX worldMatrix, D3DXMATRIX &viewMatrix, D3DXMATRIX &projectionMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR4 &clip, SceneLighting lighting) {
+	if (!setParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, camPos, clip, lighting))
 		return false;
 
 	deviceContext->IASetInputLayout(m_Layout);
@@ -212,7 +212,7 @@ bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATR
 	return true;
 }
 
-bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, SceneLighting lighting) {
+bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldMatrix, D3DXMATRIX viewMatrix, D3DXMATRIX projectionMatrix, D3DXVECTOR3 camPos, D3DXVECTOR4 &clip, SceneLighting lighting) {
 	D3D11_MAPPED_SUBRESOURCE mapMatrix, mapLight;
 	MatrixBuffer *matrixPtr;
 	SceneLighting  *lightPtr;
@@ -229,6 +229,7 @@ bool Shader::setParameters(ID3D11DeviceContext *deviceContext, D3DXMATRIX worldM
 	matrixPtr->projection	= projectionMatrix;
 	matrixPtr->camPos		= camPos;
 	matrixPtr->pad			= 0;
+	matrixPtr->clipPlane	= clip;
 	
 	deviceContext->Unmap(m_MatrixBuffer, 0);
 

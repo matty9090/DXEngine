@@ -27,7 +27,7 @@ class DXEngine {
 
 		void    createLight(PointLight *light);
 		void    createLight(SpotLight  *light);
-		void	createMirror(D3DXVECTOR2 size, Vec2<size_t> res, Camera *cam, Model *model);
+		void	createMirror(Vec2<size_t> res, Camera *cam, Model *model, bool reflect = false);
 		Cube   *createCube(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		Model  *createModel(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		Camera *createCamera(D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
@@ -53,4 +53,6 @@ class DXEngine {
 
 		float _min(float f1, float f2, float f3);
 		float _max(float f1, float f2, float f3);
+
+		void renderMirrorMatrix(Mirror &mirror, D3DXMATRIX &matrix, D3DXVECTOR3 &camPos, D3DXPLANE &plane);
 };

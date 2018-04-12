@@ -28,7 +28,7 @@ bool Graphics::init() {
 	if (!initRaster())      { MessageBoxA(m_Hwnd, "Failed to init raster",      "Error", MB_OK); return false; }
 	if (!initViewport())    { MessageBoxA(m_Hwnd, "Failed to init viewport",    "Error", MB_OK); return false; }
 	if (!initMatrices())    { MessageBoxA(m_Hwnd, "Failed to init matrices",    "Error", MB_OK); return false; }
-	if (!initFonts())		{ MessageBoxA(m_Hwnd, "Failed to init fonts",	   "Error", MB_OK); return false; }
+	if (!initFonts())		{ MessageBoxA(m_Hwnd, "Failed to init fonts",	    "Error", MB_OK); return false; }
 	
 	return true;
 }
