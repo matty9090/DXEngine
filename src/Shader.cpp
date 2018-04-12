@@ -67,7 +67,7 @@ bool Shader::init(ID3D11Device *device, std::wstring vertexShader, std::wstring 
 
 	setSamplerState();
 	setBlendState(Alpha);
-	setRasterState(D3D11_CULL_BACK);
+	setRasterState(D3D11_CULL_NONE);
 
 	return true;
 }

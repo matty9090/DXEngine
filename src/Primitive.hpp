@@ -15,6 +15,8 @@ class Primitive {
 
 		void render(ID3D11DeviceContext *deviceContext, D3DXMATRIX &viewMatrix, D3DXMATRIX &projMatrix, D3DXVECTOR3 &camPos, D3DXVECTOR4 &clip, SceneLighting lighting) const;
 		void cleanup();
+
+		bool isMirror() { return m_IsMirror; }
 		bool ignoreRaycast() { return m_IgnoreRaycast; }
 
 		void move(D3DXVECTOR3 &p);
@@ -24,6 +26,7 @@ class Primitive {
 		void setColour(Vec3<float> &colour);
 		void setScale(float scale);
 		void setScale(Vec3<float> &scale);
+		void setMirror(bool mirror) { m_IsMirror = mirror; }
 		void setIgnoreRaycast(bool ignore) { m_IgnoreRaycast = ignore; }
 
 		int getIndexCount() { return m_IndexCount; }
@@ -50,7 +53,9 @@ class Primitive {
 		D3DXVECTOR3 m_Pos, m_Rot;
 		Shader *m_Shader;
 		AABB m_AABB;
+
 		bool m_IgnoreRaycast;
+		bool m_IsMirror;
 
 		unsigned int m_VertexSize;
 		int m_VertexCount, m_IndexCount;

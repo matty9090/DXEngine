@@ -48,7 +48,8 @@ void DXEngine::renderMirrors() {
 		}
 
 		for (auto &obj : m_Objects)
-			obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), camPos, (D3DXVECTOR4)plane, m_Lighting);
+			if(!obj->isMirror())
+				obj->render(m_Context, viewMatrix, m_Graphics->getProjectionMatrix(), camPos, (D3DXVECTOR4)plane, m_Lighting);
 	}
 }
 
