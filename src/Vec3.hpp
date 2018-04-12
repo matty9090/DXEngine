@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 /*
 	2D vector class
@@ -24,7 +25,12 @@ template <class T = int> struct Vec2 {
 	}
 
 	std::string toString() {
-		return "(" + to_string(x) + ", " + to_string(y) + ")";
+		std::ostringstream ss;
+		ss.precision(5);
+
+		ss << "( " << x << ", " << ")";
+
+		return ss.str();
 	}
 };
 
@@ -79,6 +85,11 @@ template <class T = float> struct Vec3 {
 	}
 
 	std::string toString() {
-		return "( " + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")";
+		std::ostringstream ss;
+		ss.precision(5);
+
+		ss << "( " << x << ", " << y << ", " << z << ")";
+
+		return ss.str();
 	}
 };

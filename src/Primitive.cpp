@@ -62,13 +62,13 @@ void Primitive::setColour(Vec3<float> &colour) {
 void Primitive::setScale(float scale) {
 	D3DXMatrixScaling(&m_ScaleMatrix, scale, scale, scale);
 	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
-	m_AABB.setBounds(D3DXVECTOR3(-10.0f, -10.0f, -10.0f) * scale * 0.5f, D3DXVECTOR3(10.0f, 10.0f, 10.0f) * scale * 0.5f);
+	m_AABB.setBounds(D3DXVECTOR3(-10.0f, -10.0f, -10.0f) * scale, D3DXVECTOR3(10.0f, 10.0f, 10.0f) * scale);
 }
 
 void Primitive::setScale(Vec3<float>& scale) {
 	D3DXMatrixScaling(&m_ScaleMatrix, scale.x, scale.y, scale.z);
 	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
-	m_AABB.setBounds(D3DXVECTOR3(-scale.x, -scale.y, -scale.z) * 5.0f, D3DXVECTOR3(scale.x, scale.y, scale.z) * 5.0f);
+	m_AABB.setBounds(D3DXVECTOR3(-scale.x, -scale.y, -scale.z), D3DXVECTOR3(scale.x, scale.y, scale.z));
 }
 
 void Primitive::move(D3DXVECTOR3 &p) {

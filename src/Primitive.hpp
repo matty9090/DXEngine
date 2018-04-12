@@ -22,6 +22,7 @@ class Primitive {
 
 		void move(D3DXVECTOR3 &p);
 		void rotate(D3DXVECTOR3 &r);
+
 		void setPosition(Vec3<float> &pos);
 		void setPosition(D3DXVECTOR3 &pos);
 		void setColour(Vec3<float> &colour);
@@ -36,7 +37,7 @@ class Primitive {
 		void show() { m_Draw = true;  }
 		void hide() { m_Draw = false; }
 
-		D3DXVECTOR3   getPosition()		{ return m_Pos; }
+		D3DXVECTOR3  &getPosition()		{ return m_Pos; }
 		D3DMATRIX     getWorldMatrix()	{ return m_WorldMatrix; }
 		Shader       *getShader()		{ return m_Shader; }
 		ID3D11Device *getDevice()		{ return m_Device; }
