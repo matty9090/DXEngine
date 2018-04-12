@@ -18,6 +18,7 @@ class Primitive {
 
 		bool isMirror() { return m_IsMirror; }
 		bool ignoreRaycast() { return m_IgnoreRaycast; }
+		bool shouldDraw() { return m_Draw; }
 
 		void move(D3DXVECTOR3 &p);
 		void rotate(D3DXVECTOR3 &r);
@@ -32,6 +33,8 @@ class Primitive {
 		int getIndexCount() { return m_IndexCount; }
 		int getVertexCount() { return m_VertexCount; }
 
+		void show() { m_Draw = true;  }
+		void hide() { m_Draw = false; }
 
 		D3DXVECTOR3   getPosition()		{ return m_Pos; }
 		D3DMATRIX     getWorldMatrix()	{ return m_WorldMatrix; }
@@ -56,6 +59,7 @@ class Primitive {
 
 		bool m_IgnoreRaycast;
 		bool m_IsMirror;
+		bool m_Draw;
 
 		unsigned int m_VertexSize;
 		int m_VertexCount, m_IndexCount;

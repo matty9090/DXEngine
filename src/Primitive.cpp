@@ -1,7 +1,7 @@
 #include "Primitive.hpp"
 
 Primitive::Primitive(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader)
-	: m_VertexCount(0), m_IndexCount(0), m_Device(device), m_Context(context), m_AABB(m_Pos), m_IgnoreRaycast(false)
+	: m_VertexCount(0), m_IndexCount(0), m_Device(device), m_Context(context), m_AABB(m_Pos), m_IgnoreRaycast(false), m_Draw(true)
 {
 	m_VertexBuffer = NULL;
 	m_IndexBuffer = NULL;
