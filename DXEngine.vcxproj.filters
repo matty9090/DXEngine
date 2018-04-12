@@ -185,7 +185,10 @@
     <ClInclude Include="src\Import\Common\GenDefines.h">
       <Filter>Header Files\Import</Filter>
     </ClInclude>
-    <ClInclude Include="Mirror.hpp">
+    <ClInclude Include="src\Mirror.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Ray.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

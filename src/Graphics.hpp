@@ -36,6 +36,7 @@ class Graphics {
 		void drawTextValue(float x, float y, std::string desc, D3DXVECTOR3 value);
 
 		D3DXMATRIX &getProjectionMatrix() { return m_ProjectionMatrix; }
+		D3D11_VIEWPORT &getViewport() { return m_Viewport; }
 		ID3D11Device *getDevice() { return m_Device; }
 		ID3D11DeviceContext *getDeviceContext() { return m_DeviceContext; }
 
