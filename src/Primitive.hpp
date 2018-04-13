@@ -71,12 +71,18 @@ class Primitive {
 			D3DXVECTOR4 color;
 		};
 
+		struct Vertex2D {
+			D3DXVECTOR3 position;
+			D3DXVECTOR2 uv;
+		};
+
 		std::vector<Vertex> m_Vertices;
+		std::vector<Vertex2D> m_Vertices2D;
 		std::vector<WORD> m_Indices;
 
 		virtual void init() = 0;
 		void initMatrices();
-		bool initData();
+		bool initData(bool use2D = false);
 };
 
 class Cube : public Primitive {
@@ -88,4 +94,17 @@ class Cube : public Primitive {
 
 	private:
 		void init();
+};
+
+class Sprite : public Primitive {
+	public:
+		Sprite(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader);
+
+		void load(std::string file);
+
+	private:
+		void init();
+
+		DXShader m_DXShader;
+		ID3D11InputLayout *m_VertexLayout;
 };

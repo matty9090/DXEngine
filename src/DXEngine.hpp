@@ -33,6 +33,7 @@ class DXEngine {
 		void	createMirror(Vec2<size_t> res, Camera *cam, Model *model, bool reflect = false);
 		Cube   *createCube(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		Model  *createModel(DXShader shader, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		Sprite *createSprite(DXShader shader, std::string file, D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		Camera *createCamera(D3DXVECTOR3 position = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 		void RGBToHSL(int R, int G, int B, int& H, int& S, int& L);

@@ -133,6 +133,19 @@ Model *DXEngine::createModel(DXShader shader, D3DXVECTOR3 position) {
 	return model;
 }
 
+Sprite *DXEngine::createSprite(DXShader shader, std::string file, D3DXVECTOR3 position) {
+	Sprite *spr = new Sprite(m_Device, m_Context, shader);
+	spr->setPosition(position);
+	spr->load(file);
+	spr->getShader()->setDepthState(m_Graphics->getDepthStateOff());
+	spr->getShader()->setRasterState(D3D11_CULL_NONE);
+	spr->getShader()->setBlendState(Shader::Alpha);
+
+	m_Objects.push_back(spr);
+
+	return spr;
+}
+
 Camera *DXEngine::createCamera(D3DXVECTOR3 position) {
 	Camera *cam = new Camera();
 	cam->setPosition(position);

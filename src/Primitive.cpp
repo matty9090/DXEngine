@@ -89,18 +89,22 @@ void Primitive::rotate(D3DXVECTOR3 &r) {
 	m_WorldMatrix = m_ScaleMatrix * m_MatrixMov * m_RotZ * m_RotX * m_RotY;
 }
 
-bool Primitive::initData() {
+bool Primitive::initData(bool use2D) {
 	D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData, indexData;
 
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	vertexBufferDesc.ByteWidth = sizeof(Vertex) * m_VertexCount;
+	vertexBufferDesc.ByteWidth = m_VertexSize * m_VertexCount;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.StructureByteStride = 0;
 
-	vertexData.pSysMem = &m_Vertices[0];
+	if (use2D)
+		vertexData.pSysMem = &m_Vertices2D[0];
+	else
+		vertexData.pSysMem = &m_Vertices[0];
+
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
@@ -149,4 +153,46 @@ void Cube::init() {
 	m_VertexCount = m_Vertices.size();
 	m_IndexCount = m_Indices.size();
 	m_VertexSize = sizeof(Vertex);
+}
+
+Sprite::Sprite(ID3D11Device *device, ID3D11DeviceContext *context, DXShader shader) : Primitive(device, context, DXShader()), m_DXShader(shader) {
+	m_Shader = new Shader(device, context, shader.vertex, shader.pixel, false);
+	
+	init();
+	initData(true);
+}
+
+void Sprite::load(std::string file) {
+	m_Shader->setTexture(file);
+}
+
+void Sprite::init() {
+	m_Topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+
+	m_Vertices2D = {
+		{ D3DXVECTOR3(-0.5f,  0.5f, 0.0f), D3DXVECTOR2(0.0f, 0.0f) },
+		{ D3DXVECTOR3( 0.5f,  0.5f, 0.0f), D3DXVECTOR2(1.0f, 0.0f) },
+		{ D3DXVECTOR3(-0.5f, -0.5f, 0.0f), D3DXVECTOR2(0.0f, 1.0f) },
+		{ D3DXVECTOR3( 0.5f, -0.5f, 0.0f), D3DXVECTOR2(1.0f, 1.0f) }
+	};
+
+	m_Indices = {
+		0, 1, 2,
+		2, 1, 3
+	};
+
+	m_VertexCount = m_Vertices2D.size();
+	m_IndexCount = m_Indices.size();
+	m_VertexSize = sizeof(Vertex2D);
+
+	D3D11_INPUT_ELEMENT_DESC vertexLayout[] = {
+		// Semantic   Index  Format							 Slot   Offset	Slot Class					 Instance Step
+		{ "POSITION", 0,	 DXGI_FORMAT_R32G32B32_FLOAT,	 0,		0,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0,	 DXGI_FORMAT_R32G32_FLOAT,		 0,		12,		D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	unsigned int numElements = sizeof(vertexLayout) / sizeof(vertexLayout[0]);
+	m_Device->CreateInputLayout(vertexLayout, numElements, m_Shader->getVertexShaderBuffer()->GetBufferPointer(), m_Shader->getVertexShaderBuffer()->GetBufferSize(), &m_VertexLayout);
+
+	m_Shader->init(m_Device, m_DXShader.vertex, m_DXShader.pixel, m_VertexLayout);
 }

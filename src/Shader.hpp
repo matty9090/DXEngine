@@ -42,7 +42,7 @@ class Shader {
 
 		ID3DBlob *getVertexShaderBuffer() { return m_VertexShaderBuffer; }
 
-		enum EBlendState { Additive, Alpha, None };
+		enum EBlendState { Additive, Alpha, Multi, None };
 
 	private:
 		struct MatrixBuffer {

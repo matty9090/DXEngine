@@ -117,7 +117,13 @@ void Shader::setBlendState(int blend) {
 		blendState.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
 		blendState.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 		blendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-	} else {
+	} else if (blend == Multi) {
+		blendState.RenderTarget[0].BlendEnable = TRUE;
+		blendState.RenderTarget[0].SrcBlend = D3D11_BLEND_DEST_COLOR;
+		blendState.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+		blendState.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+		blendState.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+	}  else {
 		blendState.RenderTarget[0].BlendEnable = FALSE;
 	}
 
@@ -203,7 +209,7 @@ bool Shader::render(ID3D11DeviceContext *deviceContext, int indexCount, D3DXMATR
 	deviceContext->PSSetShader(m_PixelShader, NULL, 0);
 	deviceContext->PSSetSamplers(0, 1, &m_Sampler);
 	deviceContext->RSSetState(m_Raster);
-	deviceContext->OMSetBlendState(m_Blend, 0, 0xFFFFFFFF);
+	deviceContext->OMSetBlendState(m_Blend, D3DXVECTOR4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
 	
 	if(m_DepthState)
 		deviceContext->OMSetDepthStencilState(m_DepthState, 1);
